@@ -8,48 +8,212 @@ st.set_page_config(page_title="Family & Friends 2 Trainer | Методика Л�
 # Инициализация базы данных учеников и статистики
 if "users" not in st.session_state:
     st.session_state.users = {
-        "Алишер": {"score": 120, "cards_learned": 15, "grammar_solved": 8, "homework": "Выполнено (95%)", "unit": 9},
-        "Мадина": {"score": 150, "cards_learned": 22, "grammar_solved": 14, "homework": "Выполнено (100%)", "unit": 10},
-        "Тимур": {"score": 90, "cards_learned": 8, "grammar_solved": 5, "homework": "Не выполнено", "unit": 8}
+        "Алишер": {"score": 120, "cards_learned": 15, "grammar_solved": 8, "homework": "Выполнено (95%)", "unit": 1},
+        "Мадина": {"score": 150, "cards_learned": 22, "grammar_solved": 14, "homework": "Выполнено (100%)", "unit": 2},
+        "Тимур": {"score": 90, "cards_learned": 8, "grammar_solved": 5, "homework": "Не выполнено", "unit": 1}
     }
 
-# База слов, грамматики и подробных подсказок (правил) из книги
+# СТРОГАЯ БАЗА СЛОВ И ГРАММАТИКИ ИЗ КНИГИ FAMILY AND FRIENDS 2 (2nd Edition)
 if "dictionary" not in st.session_state:
     st.session_state.dictionary = {
-        "Unit 9 (Jobs & Work)": {
+        "Starter Unit (Welcome back!)": {
             "words": [
-                {"en": "fireman", "ru": "пожарный"},
-                {"en": "postman", "ru": "почтальон"},
-                {"en": "pilot", "ru": "пилот"}
+                {"en": "mum", "ru": "мама"},
+                {"en": "dad", "ru": "папа"},
+                {"en": "brother", "ru": "брат"},
+                {"en": "sister", "ru": "сестра"},
+                {"en": "grandma", "ru": "бабушка"},
+                {"en": "grandpa", "ru": "дедушка"},
+                {"en": "aunt", "ru": "тётя"},
+                {"en": "uncle", "ru": "дядя"},
+                {"en": "cousin", "ru": "двоюродный брат / сестра"}
             ],
-            "rule_title": "Грамматика: Описание профессий и мест работы",
-            "rule_text": "Для вопроса о работе используется вспомогательный глагол **does** (для he/she/it):\n- *Where does he work?* — Он работает в аэропорту (*He works in an airport*).\n- *Does she work in a shop?* — Да/Нет (*Yes, she does / No, she doesn't*)."
+            "rule_title": "Грамматика: I've got / He's got / Where's...?",
+            "rule_text": "Описание внешности и членов семьи:\n- *I've got brown hair.* (У меня каштановые волосы)\n- *He's got green eyes.* (У него зеленые глаза)\n- *Where's Billy? Is he under the bed?* (Где Билли? Он под кроватью?)"
         },
-        "Unit 10 (Weather & Clothes)": {
+        "Unit 1 (Our new things)": {
+            "words": [
+                {"en": "classroom", "ru": "класс (комната)"},
+                {"en": "table", "ru": "стол"},
+                {"en": "computer", "ru": "компьютер"},
+                {"en": "peg", "ru": "вешалка / крючок"},
+                {"en": "pencil case", "ru": "пенал"},
+                {"en": "board", "ru": "доска"},
+                {"en": "poster", "ru": "плакат"},
+                {"en": "picture", "ru": "картинка"},
+                {"en": "cupboard", "ru": "шкаф"}
+            ],
+            "rule_title": "Грамматика: This / That / These / Those",
+            "rule_text": "Указательные местоимения в школе:\n- *This is the new computer.* (Это... ед. число, близко)\n- *That is a new board.* (То... ед. число, далеко)\n- *These are new tables.* (Эти... мн. число, близко)\n- *Those are new pegs.* (Те... мн. число, далеко)"
+        },
+        "Unit 2 (They're happy now!)": {
+            "words": [
+                {"en": "hot", "ru": "жаркий / жарко"},
+                {"en": "cold", "ru": "холодный / холодно"},
+                {"en": "hungry", "ru": "голодный"},
+                {"en": "thirsty", "ru": "хочу пить"},
+                {"en": "happy", "ru": "счастливый"},
+                {"en": "sad", "ru": "грустный"},
+                {"en": "tired", "ru": "уставший"},
+                {"en": "angry", "ru": "злой"},
+                {"en": "scared", "ru": "испуганный"},
+                {"en": "brave", "ru": "храбрый"}
+            ],
+            "rule_title": "Грамматика: We're / They're и вопросы Are they...?",
+            "rule_text": "Выражение чувств и состояний:\n- *We're happy.* / *They're hungry.*\n- *Are they hot?* — *No, they aren't. / Yes, they are.*"
+        },
+        "Unit 3 (I can ride a bike!)": {
+            "words": [
+                {"en": "ride a bike", "ru": "кататься на велосипеде"},
+                {"en": "ride a horse", "ru": "скакать на лошади"},
+                {"en": "skate", "ru": "кататься на коньках"},
+                {"en": "skateboard", "ru": "кататься на скейтборде"},
+                {"en": "play tennis", "ru": "играть в теннис"},
+                {"en": "play football", "ru": "играть в футбол"}
+            ],
+            "rule_title": "Грамматика: Can / Can't и предлоги места",
+            "rule_text": "Умения и расположение предметов:\n- *I can skate.* / *I can't skateboard.*\n- *Can she play tennis?* — *Yes, she can.* / *No, he can't.*\n- Предлоги: *behind* (за), *in front of* (перед), *next to* (рядом), *between* (между)."
+        },
+        "Unit 4 (Have you got a milkshake?)": {
+            "words": [
+                {"en": "salad", "ru": "салат"},
+                {"en": "fries", "ru": "картофель фри"},
+                {"en": "pizza", "ru": "пицца"},
+                {"en": "milkshake", "ru": "молочный коктейль"},
+                {"en": "cheese", "ru": "сыр"},
+                {"en": "sandwich", "ru": "бутерброд"},
+                {"en": "chicken", "ru": "курица"}
+            ],
+            "rule_title": "Грамматика: Have you got...? / Has he got...?",
+            "rule_text": "Вопросы о наличии еды:\n- *Have you got a milkshake?* — *Yes, I have. / No, I haven't.*\n- *Has he got a cheese sandwich?* — *Yes, he has. / No, he hasn't.*"
+        },
+        "Unit 5 (We've got English!)": {
+            "words": [
+                {"en": "art", "ru": "рисование (изо)"},
+                {"en": "maths", "ru": "математика"},
+                {"en": "English", "ru": "английский язык"},
+                {"en": "science", "ru": "окружающий мир / наука"},
+                {"en": "PE", "ru": "физкультура"},
+                {"en": "music", "ru": "музыка"}
+            ],
+            "rule_title": "Грамматика: What/When have we got...? our/their",
+            "rule_text": "Школьные предметы и расписание:\n- *What have we got on Monday? We've got English.*\n- *When have we got PE? We've got PE on Thursday.*\n- Местоимения: *our* (наш), *their* (их)."
+        },
+        "Unit 6 (Let's play after school!)": {
+            "words": [
+                {"en": "help my mum", "ru": "помогать маме"},
+                {"en": "do my homework", "ru": "делать домашнее задание"},
+                {"en": "visit my grandma", "ru": "навещать бабушку"},
+                {"en": "go swimming", "ru": "ходить плавать"},
+                {"en": "have a music lesson", "ru": "быть на уроке музыки"},
+                {"en": "watch TV", "ru": "смотреть телевизор"}
+            ],
+            "rule_title": "Грамматика: I visit... / I don't have...",
+            "rule_text": "Повседневные действия после школы:\n- *I visit my grandma every Tuesday.*\n- *I don't have a music lesson.*\n- *I go swimming every Thursday.*"
+        },
+        "Unit 7 (Let's buy presents!)": {
+            "words": [
+                {"en": "chocolate", "ru": "шоколад"},
+                {"en": "sweets", "ru": "конфеты / сладости"},
+                {"en": "balloon", "ru": "воздушный шар"},
+                {"en": "present", "ru": "подарок"},
+                {"en": "cake", "ru": "торт / пирог"},
+                {"en": "card", "ru": "открытка"}
+            ],
+            "rule_title": "Грамматика: I like / He likes / doesn't like",
+            "rule_text": "Выражение предпочтений:\n- *I like balloons. / I don't like sweets.*\n- *He likes chocolate. / He doesn't like balloons.*"
+        },
+        "Unit 8 (What's the time?)": {
+            "words": [
+                {"en": "get up", "ru": "вставать"},
+                {"en": "have breakfast", "ru": "завтракать"},
+                {"en": "go to school", "ru": "идти в школу"},
+                {"en": "go home", "ru": "идти домой"},
+                {"en": "have dinner", "ru": "ужинать"},
+                {"en": "go to bed", "ru": "ложиться спать"}
+            ],
+            "rule_title": "Грамматика: Время и распорядок дня",
+            "rule_text": "Определение времени и действий по часам:\n- *What's the time? It's seven o'clock.*\n- *He gets up at six o'clock.*\n- *She goes to bed at nine o'clock.*"
+        },
+        "Unit 9 (Where does she work?)": {
+            "words": [
+                {"en": "hospital", "ru": "больница"},
+                {"en": "school", "ru": "школа"},
+                {"en": "airport", "ru": "аэропорт"},
+                {"en": "police station", "ru": "полицейский участок"},
+                {"en": "fire station", "ru": "пожарная станция"},
+                {"en": "shop", "ru": "магазин"}
+            ],
+            "rule_title": "Грамматика: Where does he work? / Does she work...?",
+            "rule_text": "Вопросы о местах работы:\n- *Where does he work? He works in a police station.*\n- *Does she work in a shop? Yes, she does / No, she doesn't.*"
+        },
+        "Unit 10 (It's hot today!)": {
             "words": [
                 {"en": "sunny", "ru": "солнечно"},
-                {"en": "coat", "ru": "пальто"},
-                {"en": "sun hat", "ru": "солнечная шляпа"}
+                {"en": "windy", "ru": "ветрено"},
+                {"en": "raining", "ru": "идет дождь"},
+                {"en": "snowing", "ru": "идет снег"},
+                {"en": "hot", "ru": "жарко"},
+                {"en": "cold", "ru": "холодно"}
             ],
-            "rule_title": "Грамматика: Погода и побудительные предложения",
-            "rule_text": "Для указания погоды используем *It's...* (например, *It's sunny* — солнечно).\nДля советов по одежде используем повелительное наклонение:\n- **Put on** your sun hat. (Надень...)\n- **Don't put on** your coat. (Не надевай...)"
+            "rule_title": "Грамматика: What's the weather like? Put on / Don't put on",
+            "rule_text": "Описание погоды и советы по одежде:\n- *What's the weather like? It's sunny.*\n- *Put on your sun hat.*\n- *Don't put on your coat.*"
         },
         "Unit 11 (What are you wearing?)": {
             "words": [
                 {"en": "skirt", "ru": "юбка"},
+                {"en": "scarf", "ru": "шарф"},
                 {"en": "gloves", "ru": "перчатки"},
-                {"en": "jeans", "ru": "джинсы"}
+                {"en": "jeans", "ru": "джинсы"},
+                {"en": "boots", "ru": "ботинки / сапоги"},
+                {"en": "shirt", "ru": "рубашка"}
             ],
-            "rule_title": "Грамматика: Что ты носишь (Present Continuous)",
-            "rule_text": "Для описания одежды в данный момент используем глагол *to be + verb-ing*:\n- *What are you wearing?* — *I'm wearing a blue skirt.*\n- *What's he wearing?* — *He's wearing red gloves.*"
+            "rule_title": "Грамматика: Present Continuous (What are you wearing?)",
+            "rule_text": "Описание одежды на человеке в данный момент:\n- *What are you wearing? I'm wearing a blue skirt.*\n- *What's he wearing? He's wearing a yellow shirt.*\n- *She's wearing red trousers.*"
         },
-        "Unit 13 (Comparisons)": {
+        "Unit 12 (You're sleeping!)": {
             "words": [
-                {"en": "bigger", "ru": "больше"},
-                {"en": "shorter", "ru": "короче / ниже"}
+                {"en": "wedding", "ru": "свадьба"},
+                {"en": "guests", "ru": "гости"},
+                {"en": "cake", "ru": "торт"},
+                {"en": "bride", "ru": "невеста"},
+                {"en": "band", "ru": "музыкальная группа / оркестр"},
+                {"en": "invitation", "ru": "приглашение"}
             ],
-            "rule_title": "Грамматика: Сравнительная степень прилагательных",
-            "rule_text": "Чтобы сравнить два предмета или человека, к короткому прилагательному добавляется суффикс **-er** и слово **than** (чем):\n- *The sheep is **bigger than** the goat.*\n- *The boy is **shorter than** the girl.*"
+            "rule_title": "Грамматика: Present Continuous (What are you doing?)",
+            "rule_text": "Описание действий в момент речи:\n- *What are you doing? I'm dancing with friends.*\n- *What's she doing? She's eating the cake.*\n- *What are they doing? They're talking.*"
+        },
+        "Unit 13 (Look at all the animals!)": {
+            "words": [
+                {"en": "cow", "ru": "корова"},
+                {"en": "goat", "ru": "коза"},
+                {"en": "horse", "ru": "лошадь"},
+                {"en": "sheep", "ru": "овца / баран"},
+                {"en": "donkey", "ru": "осел"},
+                {"en": "goose", "ru": "гусь"}
+            ],
+            "rule_title": "Грамматика: Сравнительная степень прилагательных (-er than)",
+            "rule_text": "Сравнение животных и предметов:\n- *This cow is bigger than that cow.*\n- *This sheep is smaller than that sheep.*\n- *The horse is bigger than the goat.*"
+        },
+        "Unit 14 (Look at the photos!)": {
+            "words": [
+                {"en": "was", "ru": "был / была (ед.ч.)"},
+                {"en": "were", "ru": "были (мн.ч.)"},
+                {"en": "wasn't", "ru": "не был / не была"},
+                {"en": "weren't", "ru": "не были"}
+            ],
+            "rule_title": "Грамматика: Past Simple (I was / You were)",
+            "rule_text": "Прошедшее время глагола to be:\n- *I was naughty. You were happy.*\n- *He wasn't sad. They weren't cold.*"
+        },
+        "Unit 15 (Well done!)": {
+            "words": [
+                {"en": "children", "ru": "дети"},
+                {"en": "men", "ru": "мужчины"},
+                {"en": "women", "ru": "женщины"},
+                {"en": "people", "ru": "люди"}
+            ],
+            "rule_title": "Грамматика: There were some / weren't any",
+            "rule_text": "Утверждения и отрицания в прошедшем времени с множественным числом:\n- *There were some children.*\n- *There weren't any men.*"
         }
     }
 
@@ -90,7 +254,7 @@ elif role == "👦 Режим ученика (Тренажер)":
         st.warning("Список учеников пуст.")
     else:
         student_name = st.selectbox("Выберите ваше имя:", list(st.session_state.users.keys()))
-        selected_unit = st.selectbox("Выберите тему / юнит:", list(st.session_state.dictionary.keys()))
+        selected_unit = st.selectbox("Выберите юнит из книги:", list(st.session_state.dictionary.keys()))
         
         user_info = st.session_state.users[student_name]
         st.info(f"👤 **{student_name}** | ⭐️ Баллы: **{user_info['score']} XP** | 🃏 Выучено карточек: **{user_info['cards_learned']}** | 📝 Решено грамматики: **{user_info['grammar_solved']}**")
@@ -101,12 +265,16 @@ elif role == "👦 Режим ученика (Тренажер)":
         
         # --- ВКЛАДКА 1: КОМПАКТНЫЕ КАРТОЧКИ ПО ЦЕНТРУ С ПЕРЕВОРОТОМ ---
         with tab1:
-            st.subheader("🃏 Карточки для запоминания слов")
+            st.subheader("🃏 Карточки слов по юнитам из книги")
             
             if f"card_idx_{selected_unit}" not in st.session_state:
                 st.session_state[f"card_idx_{selected_unit}"] = 0
             
             idx = st.session_state[f"card_idx_{selected_unit}"]
+            if idx >= len(words_list):
+                idx = 0
+                st.session_state[f"card_idx_{selected_unit}"] = 0
+                
             current_card = words_list[idx]
             
             if f"is_flipped_{selected_unit}_{idx}" not in st.session_state:
@@ -124,7 +292,7 @@ elif role == "👦 Режим ученика (Тренажер)":
             }
             .flashcard {
                 width: 350px;
-                height: 200px;
+                height: 180px;
                 background: linear-gradient(135deg, #2e6c80 0%, #4682b4 100%);
                 color: white;
                 border-radius: 15px;
@@ -138,19 +306,19 @@ elif role == "👦 Режим ученика (Тренажер)":
                 padding: 20px;
             }
             .card-title {
-                font-size: 16px;
+                font-size: 14px;
                 opacity: 0.8;
-                margin-bottom: 10px;
+                margin-bottom: 8px;
             }
             .card-word {
-                font-size: 36px;
+                font-size: 32px;
                 font-weight: bold;
             }
             </style>
             """, unsafe_allow_html=True)
             
             word_display = current_card['ru'] if is_flipped else current_card['en']
-            title_display = "🇷🇺 Перевод на русском:" if is_flipped else "🇬🇧 Английское слово:"
+            title_display = "🇷🇺 Перевод на русском:" if is_flipped else "🇬🇧 Английское слово из книги:"
             
             st.markdown(f"""
             <div class="card-container">
@@ -176,14 +344,14 @@ elif role == "👦 Режим ученика (Тренажер)":
 
         # --- ВКЛАДКА 2: УПРАЖНЕНИЯ С КНОПКОЙ ПОДСКАЗКИ / ПРАВИЛА ---
         with tab2:
-            st.subheader("📝 Упражнения по грамматике и лексике")
+            st.subheader("📝 Упражнения по грамматике из книги")
             
             with st.expander("💡 Нажмите здесь, чтобы открыть Подсказку и Правило по уроку"):
                 st.markdown(f"### {unit_data['rule_title']}")
                 st.markdown(unit_data['rule_text'])
             
             current_item = random.choice(words_list)
-            st.markdown(f"**Переведите слово на русский язык:** `{current_item['en']}`")
+            st.markdown(f"**Переведите слово из этого юнита на русский язык:** `{current_item['en']}`")
             
             user_ans = st.text_input("Ваш ответ:", key=f"ans_{selected_unit}")
             if st.button("Проверить упражнение"):
