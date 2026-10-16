@@ -1,21 +1,36 @@
 import streamlit as st
 import pandas as pd
 import random
+import json
+import os
 
 st.set_page_config(page_title="Family & Friends 2 Trainer | Методика Алимжановой Л.Х.", page_icon="🎒", layout="wide")
+
+# --- СИСТЕМА СОХРАНЕНИЯ ДАННЫХ ---
+DATA_FILE = "users_data.json"
+
+def load_users():
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+def save_users(users_dict):
+    with open(DATA_FILE, "w", encoding="utf-8") as f:
+        json.dump(users_dict, f, ensure_ascii=False, indent=4)
+
+# Инициализация пустой базы данных из файла
+if "users" not in st.session_state:
+    st.session_state.users = load_users()
 
 def init_progress(user_name):
     if "progress" not in st.session_state.users[user_name]:
         st.session_state.users[user_name]["progress"] = {}
 
-# Инициализация пустой базы данных (тестовые ученики удалены)
-if "users" not in st.session_state:
-    st.session_state.users = {}
-
 for u in st.session_state.users:
     init_progress(u)
 
-# СТРОГАЯ БАЗА УРОКОВ ИЗ КНИГИ
+# СТРОГАЯ БАЗА УРОКОВ ИЗ КНИГИ (Все 15 юнитов + Starter)
 if "dictionary" not in st.session_state:
     st.session_state.dictionary = {
         "Starter Unit": {
@@ -237,6 +252,7 @@ if "dictionary" not in st.session_state:
         }
     }
 
+# Функция для кнопки озвучки
 def text_to_speech_button(text):
     html = f"""
     <button onclick="let u = new SpeechSynthesisUtterance('{text}'); u.lang = 'en-US'; window.speechSynthesis.speak(u);" 
@@ -262,49 +278,46 @@ if role == "👨‍🏫 Кабинет преподавателя":
         st.success("Доступ разрешен!")
         
         st.subheader("➕ Добавить нового ученика")
-        col1, col2 = st.columns(2)
-        with col1:
+        
+        # Форма для автоматической очистки поля
+        with st.form("add_student_form", clear_on_submit=True):
             new_student = st.text_input("Имя нового ученика:")
-            if st.button("Зарегистрировать"):
-                if new_student and new_student not in st.session_state.users:
+            submitted = st.form_submit_button("Зарегистрировать")
+            
+            if submitted:
+                if new_student.strip() == "":
+                    st.warning("Имя не может быть пустым!")
+                elif new_student in st.session_state.users:
+                    st.warning(f"Ученик '{new_student}' уже есть в журнале!")
+                else:
                     st.session_state.users[new_student] = {"score": 0, "level": 1, "progress": {}}
                     init_progress(new_student)
-                    st.success(f"Ученик {new_student} добавлен!")
-                    st.rerun()
-                elif new_student in st.session_state.users:
-                    st.warning("Такое имя уже существует.")
+                    save_users(st.session_state.users)
+                    st.success(f"Ученик {new_student} успешно добавлен!")
         
         st.markdown("---")
-        st.subheader("⚙️ Управление учениками (Редактировать / Удалить)")
+        st.subheader("📊 Журнал успеваемости (Все ученики)")
+        
         if st.session_state.users:
-            col_edit1, col_edit2, col_edit3 = st.columns(3)
-            with col_edit1:
-                student_to_manage = st.selectbox("Выберите ученика:", list(st.session_state.users.keys()))
-            with col_edit2:
-                new_name = st.text_input("Новое имя (если была ошибка):", value=student_to_manage)
-                if st.button("💾 Сохранить имя"):
-                    if new_name and new_name != student_to_manage:
-                        if new_name not in st.session_state.users:
-                            st.session_state.users[new_name] = st.session_state.users.pop(student_to_manage)
-                            st.success(f"Имя изменено на {new_name}!")
-                            st.rerun()
-                        else:
-                            st.error("Ученик с таким именем уже существует!")
-            with col_edit3:
-                st.write("")
-                st.write("")
-                if st.button("❌ Удалить ученика"):
-                    del st.session_state.users[student_to_manage]
-                    st.success("Ученик удален!")
-                    st.rerun()
+            report = [{"Ученик": k, "XP (Баллы)": v["score"], "Открытый уровень": v["level"]} for k, v in st.session_state.users.items()]
+            st.dataframe(pd.DataFrame(report), use_container_width=True)
             
             st.markdown("---")
-            st.subheader("📊 Отчет по успеваемости")
-            report = [{"Ученик": k, "XP (Общий балл)": v["score"], "Открытый уровень": v["level"]} for k, v in st.session_state.users.items()]
-            st.dataframe(pd.DataFrame(report), use_container_width=True)
+            st.subheader("❌ Удалить ученика")
+            col_del1, col_del2 = st.columns([2, 1])
+            with col_del1:
+                student_to_delete = st.selectbox("Кого удалить из журнала?", list(st.session_state.users.keys()))
+            with col_del2:
+                st.write("")
+                st.write("")
+                if st.button("Удалить навсегда"):
+                    del st.session_state.users[student_to_delete]
+                    save_users(st.session_state.users)
+                    st.success("Ученик удален.")
+                    st.rerun()
         else:
-            st.info("В базе пока нет учеников. Добавьте их в меню выше.")
-            
+            st.info("В журнале пока нет учеников. Зарегистрируйте их выше.")
+
     elif password != "":
         st.error("Неверный пароль!")
 
@@ -323,7 +336,7 @@ elif role == "👦 Режим ученика":
 
         tab1, tab2 = st.tabs(["🃏 Словарь (Свободный доступ)", "🔥 Марафон грамматики (40 вопросов)"])
         
-        # Вкладка 1: Карточки с красивым дизайном и озвучкой
+        # Вкладка 1: Карточки с озвучкой
         with tab1:
             st.subheader("🃏 Карточки слов")
             words_list = unit_data["words"]
@@ -395,6 +408,7 @@ elif role == "👦 Режим ученика":
                     st.success("🎉 ПОЗДРАВЛЯЕМ! ТЫ ИДЕАЛЬНО ОСВОИЛ ЭТОТ УРОК!")
                     if user_info["level"] == unit_data["level_id"]:
                         st.session_state.users[student_name]["level"] += 1
+                        save_users(st.session_state.users)
                         st.balloons()
                         st.info("🔓 Открыт следующий уровень!")
                 else:
@@ -415,9 +429,11 @@ elif role == "👦 Режим ученика":
                             st.success("✅ Верно! +1 балл к прогрессу.")
                             st.session_state.users[student_name]["score"] += 5
                             st.session_state.users[student_name]["progress"][selected_unit] += 1
+                            save_users(st.session_state.users)
                         else:
                             st.error(f"❌ Ошибка! Правильно: **{task['answer']}**. Штраф -1 балл!")
                             st.session_state.users[student_name]["progress"][selected_unit] = max(0, current_prog - 1)
+                            save_users(st.session_state.users)
                         
                         st.session_state[f"g_idx_{selected_unit}"] = random.randint(0, len(unit_data["grammar_tasks"])-1)
                         st.rerun()
@@ -425,8 +441,11 @@ elif role == "👦 Режим ученика":
 # --- РЕЙТИНГ ---
 elif role == "🏆 Рейтинг":
     st.title("🏆 Доска почета")
-    sorted_users = sorted(st.session_state.users.items(), key=lambda x: x[1]["score"], reverse=True)
-    medals = ["🥇", "🥈", "🥉"]
-    for rank, (name, info) in enumerate(sorted_users):
-        medal = medals[rank] if rank < 3 else "🏅"
-        st.markdown(f"### {medal} {rank+1} место: {name} — **{info['score']} XP** (Уровень: {info['level']})")
+    if not st.session_state.users:
+        st.info("В системе пока нет учеников.")
+    else:
+        sorted_users = sorted(st.session_state.users.items(), key=lambda x: x[1]["score"], reverse=True)
+        medals = ["🥇", "🥈", "🥉"]
+        for rank, (name, info) in enumerate(sorted_users):
+            medal = medals[rank] if rank < 3 else "🏅"
+            st.markdown(f"### {medal} {rank+1} место: {name} — **{info['score']} XP** (Уровень: {info['level']})")
