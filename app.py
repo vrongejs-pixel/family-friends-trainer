@@ -4,10 +4,12 @@ import random
 
 st.set_page_config(page_title="Family & Friends 2 Trainer | Методика Алимжановой Л.Х.", page_icon="🎒", layout="wide")
 
+# Функция для безопасного создания прогресса нового ученика
 def init_progress(user_name):
     if "progress" not in st.session_state.users[user_name]:
         st.session_state.users[user_name]["progress"] = {}
 
+# Инициализация базы данных: добавлен словарь "progress" для 40 вопросов
 if "users" not in st.session_state:
     st.session_state.users = {
         "Алишер": {"score": 120, "level": 2, "progress": {"Starter Unit": 40, "Unit 1": 15}},
@@ -18,6 +20,7 @@ if "users" not in st.session_state:
 for u in st.session_state.users:
     init_progress(u)
 
+# СТРОГАЯ БАЗА УРОКОВ ИЗ КНИГИ
 if "dictionary" not in st.session_state:
     st.session_state.dictionary = {
         "Starter Unit": {
@@ -248,25 +251,33 @@ def text_to_speech_button(text):
     """
     return html
 
+# --- ШАПКА ---
 st.markdown("<h1 style='text-align: center; color: #2e6c80;'>✨ Интерактивная обучающая платформа Family and Friends 2</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center; color: #555;'>Инновационная методика учителя школы №20 <b>Алимжановой Лайло Хамадуллаевной</b></h3>", unsafe_allow_html=True)
 st.markdown("---")
 
 role = st.sidebar.radio("Выберите режим:", ["👦 Режим ученика", "👨‍🏫 Кабинет преподавателя", "🏆 Рейтинг"])
 
+# --- КАБИНЕТ ПРЕПОДАВАТЕЛЯ ---
 if role == "👨‍🏫 Кабинет преподавателя":
     st.title("👨‍🏫 Кабинет преподавателя")
     password = st.text_input("Введите пароль:", type="password")
-    if password == "school20":
+    
+    # Ваш новый пароль
+    if password == "lx890723":
         new_student = st.text_input("Имя нового ученика:")
         if st.button("Зарегистрировать"):
             if new_student and new_student not in st.session_state.users:
                 st.session_state.users[new_student] = {"score": 0, "level": 1, "progress": {}}
                 init_progress(new_student)
                 st.success(f"Ученик {new_student} добавлен!")
-        report = [{"Ученик": k, "XP": v["score"], "Открытый уровень": v["level"]} for k, v in st.session_state.users.items()]
+        
+        report = [{"Ученик": k, "XP (Общий балл)": v["score"], "Открытый уровень": v["level"]} for k, v in st.session_state.users.items()]
         st.dataframe(pd.DataFrame(report))
+    elif password != "":
+        st.error("Неверный пароль!")
 
+# --- РЕЖИМ УЧЕНИКА ---
 elif role == "👦 Режим ученика":
     if not st.session_state.users:
         st.warning("Список учеников пуст.")
@@ -281,17 +292,23 @@ elif role == "👦 Режим ученика":
 
         tab1, tab2 = st.tabs(["🃏 Словарь (Свободный доступ)", "🔥 Марафон грамматики (40 вопросов)"])
         
+        # Вкладка 1: Карточки
         with tab1:
             st.subheader("🃏 Карточки слов")
             words_list = unit_data["words"]
+            
             if f"c_idx_{selected_unit}" not in st.session_state:
                 st.session_state[f"c_idx_{selected_unit}"] = 0
+                
             idx = st.session_state[f"c_idx_{selected_unit}"]
-            if idx >= len(words_list): idx = 0
+            if idx >= len(words_list): 
+                idx = 0
+                
             current_card = words_list[idx]
             
             if f"is_flipped_{selected_unit}_{idx}" not in st.session_state:
                 st.session_state[f"is_flipped_{selected_unit}_{idx}"] = False
+            
             is_flipped = st.session_state[f"is_flipped_{selected_unit}_{idx}"]
             
             st.markdown("""
@@ -328,13 +345,16 @@ elif role == "👦 Режим ученика":
                     st.session_state[f"c_idx_{selected_unit}"] = (idx + 1) % len(words_list)
                     st.rerun()
 
+        # Вкладка 2: Марафон
         with tab2:
             st.subheader("🔥 Марафон: Докажи, что знаешь правило!")
+            
             if user_info["level"] < unit_data["level_id"]:
                 st.error("🔒 **УРОК ЗАКРЫТ!** Сначала пройди марафон в предыдущем юните.")
             else:
                 if selected_unit not in user_info["progress"]:
                     user_info["progress"][selected_unit] = 0
+                    
                 current_prog = user_info["progress"][selected_unit]
                 
                 st.progress(min(current_prog / 40.0, 1.0))
@@ -371,6 +391,7 @@ elif role == "👦 Режим ученика":
                         st.session_state[f"g_idx_{selected_unit}"] = random.randint(0, len(unit_data["grammar_tasks"])-1)
                         st.rerun()
 
+# --- РЕЙТИНГ ---
 elif role == "🏆 Рейтинг":
     st.title("🏆 Доска почета")
     sorted_users = sorted(st.session_state.users.items(), key=lambda x: x[1]["score"], reverse=True)
