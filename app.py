@@ -4,6 +4,11 @@ import random
 
 st.set_page_config(page_title="Family & Friends 2 Trainer | Методика Алимжановой Л.Х.", page_icon="🎒", layout="wide")
 
+# Функция для безопасного создания прогресса нового ученика
+def init_progress(user_name):
+    if "progress" not in st.session_state.users[user_name]:
+        st.session_state.users[user_name]["progress"] = {}
+
 # Инициализация базы данных: добавлен словарь "progress" для 40 вопросов
 if "users" not in st.session_state:
     st.session_state.users = {
@@ -11,11 +16,6 @@ if "users" not in st.session_state:
         "Мадина": {"score": 150, "level": 3, "progress": {"Starter Unit": 40, "Unit 1": 40, "Unit 2": 5}},
         "Тимур": {"score": 90, "level": 1, "progress": {"Starter Unit": 0}}
     }
-
-# Функция для безопасного создания прогресса нового ученика
-def init_progress(user_name):
-    if "progress" not in st.session_state.users[user_name]:
-        st.session_state.users[user_name]["progress"] = {}
 
 for u in st.session_state.users:
     init_progress(u)
@@ -116,7 +116,7 @@ elif role == "👦 Режим ученика":
 
         tab1, tab2 = st.tabs(["🃏 Словарь (Свободный доступ)", "🔥 Марафон грамматики (40 вопросов)"])
         
-        # Вкладка 1: Слова
+        # Вкладка 1: Карточки с красивым дизайном
         with tab1:
             st.subheader("🃏 Карточки слов")
             words_list = unit_data["words"]
@@ -130,17 +130,41 @@ elif role == "👦 Режим ученика":
                 
             current_card = words_list[idx]
             
-            # Простой и надежный переключатель карточки
-            is_flipped = st.checkbox("Показать перевод на русский", key=f"flip_{selected_unit}_{idx}")
+            # Состояние переворота карточки
+            if f"is_flipped_{selected_unit}_{idx}" not in st.session_state:
+                st.session_state[f"is_flipped_{selected_unit}_{idx}"] = False
             
-            if is_flipped:
-                st.markdown(f"<h1 style='text-align:center; color:#e74c3c;'>🇷🇺 {current_card['ru']}</h1>", unsafe_allow_html=True)
-            else:
-                st.markdown(f"<h1 style='text-align:center; color:#3498db;'>🇬🇧 {current_card['en']}</h1>", unsafe_allow_html=True)
-                
-            if st.button("Следующее слово ➡️"):
-                st.session_state[f"c_idx_{selected_unit}"] = (idx + 1) % len(words_list)
-                st.rerun()
+            is_flipped = st.session_state[f"is_flipped_{selected_unit}_{idx}"]
+            
+            # CSS дизайн для центрированной карточки
+            st.markdown("""
+            <style>
+            .card-container { display: flex; justify-content: center; align-items: center; margin: 20px 0; }
+            .flashcard {
+                width: 350px; height: 180px; background: linear-gradient(135deg, #2e6c80 0%, #4682b4 100%);
+                color: white; border-radius: 15px; display: flex; flex-direction: column; justify-content: center;
+                align-items: center; box-shadow: 0 8px 16px rgba(0,0,0,0.2); font-family: sans-serif; text-align: center; padding: 20px;
+            }
+            .card-title { font-size: 16px; opacity: 0.8; margin-bottom: 8px; color: #f1c40f; font-weight: bold;}
+            .card-word { font-size: 36px; font-weight: bold; }
+            </style>
+            """, unsafe_allow_html=True)
+            
+            word_display = current_card['ru'] if is_flipped else current_card['en']
+            title_display = "RUS (Перевод):" if is_flipped else "ENG (Слово):"
+            
+            st.markdown(f'<div class="card-container"><div class="flashcard"><div class="card-title">{title_display}</div><div class="card-word">{word_display}</div></div></div>', unsafe_allow_html=True)
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("🔄 Перевернуть карточку"):
+                    st.session_state[f"is_flipped_{selected_unit}_{idx}"] = not is_flipped
+                    st.rerun()
+            with col2:
+                if st.button("Следующее слово ➡️"):
+                    st.session_state[f"is_flipped_{selected_unit}_{idx}"] = False
+                    st.session_state[f"c_idx_{selected_unit}"] = (idx + 1) % len(words_list)
+                    st.rerun()
 
         # Вкладка 2: Марафон 40 вопросов
         with tab2:
@@ -159,7 +183,6 @@ elif role == "👦 Режим ученика":
                 
                 if current_prog >= 40:
                     st.success("🎉 ПОЗДРАВЛЯЕМ! ТЫ ИДЕАЛЬНО ОСВОИЛ ЭТОТ УРОК!")
-                    # Открываем следующий уровень, если это текущий потолок ученика
                     if user_info["level"] == unit_data["level_id"]:
                         st.session_state.users[student_name]["level"] += 1
                         st.balloons()
@@ -184,10 +207,8 @@ elif role == "👦 Режим ученика":
                             st.session_state.users[student_name]["progress"][selected_unit] += 1
                         else:
                             st.error(f"❌ Ошибка! Правильно: **{task['answer']}**. Штраф -1 балл!")
-                            # Не даем прогрессу упасть ниже нуля
                             st.session_state.users[student_name]["progress"][selected_unit] = max(0, current_prog - 1)
                         
-                        # Даем новый случайный вопрос
                         st.session_state[f"g_idx_{selected_unit}"] = random.randint(0, len(unit_data["grammar_tasks"])-1)
                         st.rerun()
 
