@@ -2,15 +2,15 @@ import streamlit as st
 import pandas as pd
 import random
 
-# Настройка страницы (исправлено)
+# Настройка страницы
 st.set_page_config(page_title="Family & Friends 2 Trainer | Методика Лайло Алимжановой", page_icon="🎒", layout="wide")
 
-# Инициализация базы данных в памяти сессии
+# Инициализация базы данных учеников и их личной статистики
 if "users" not in st.session_state:
     st.session_state.users = {
-        "Алишер": {"score": 120, "homework": "Выполнено (95%)", "unit": 9},
-        "Мадина": {"score": 150, "homework": "Выполнено (100%)", "unit": 10},
-        "Тимур": {"score": 90, "homework": "Не выполнено", "unit": 8}
+        "Алишер": {"score": 120, "cards_learned": 15, "grammar_solved": 8, "homework": "Выполнено (95%)", "unit": 9},
+        "Мадина": {"score": 150, "cards_learned": 22, "grammar_solved": 14, "homework": "Выполнено (100%)", "unit": 10},
+        "Тимур": {"score": 90, "cards_learned": 8, "grammar_solved": 5, "homework": "Не выполнено", "unit": 8}
     }
 
 # База слов и грамматики из Family and Friends 2 (2nd Edition)
@@ -64,17 +64,19 @@ if role == "👨‍🏫 Кабинет преподавателя":
             new_student_name = st.text_input("Имя ученика:")
             if st.button("Зарегистрировать ученика"):
                 if new_student_name and new_student_name not in st.session_state.users:
-                    st.session_state.users[new_student_name] = {"score": 0, "homework": "Не начато", "unit": 1}
+                    st.session_state.users[new_student_name] = {"score": 0, "cards_learned": 0, "grammar_solved": 0, "homework": "Не начато", "unit": 1}
                     st.success(f"Ученик {new_student_name} успешно добавлен в систему!")
                 else:
                     st.warning("Введите имя или такое имя уже существует.")
         
-        st.subheader("📊 Отчет по успеваемости и домашним заданиям")
+        st.subheader("📊 Детальный отчет по каждому ученику")
         report_data = []
         for name, info in st.session_state.users.items():
             report_data.append({
                 "Ученик": name,
-                "Баллы (XP)": info["score"],
+                "Общие баллы (XP)": info["score"],
+                "Выучено карточек": info["cards_learned"],
+                "Решено грамматики": info["grammar_solved"],
                 "Статус ДЗ": info["homework"],
                 "Текущий юнит": info["unit"]
             })
@@ -97,32 +99,70 @@ elif role == "👦 Режим ученика (Тренажер)":
         student_name = st.selectbox("Выберите ваше имя:", list(st.session_state.users.keys()))
         selected_unit = st.selectbox("Выберите тему / юнит:", list(st.session_state.dictionary.keys()))
         
-        tab1, tab2 = st.tabs(["🃏 Карточки слов (Flashcards)", "📝 Грамматический тренажер"])
+        # Показываем личную статистику ученика сверху
+        user_info = st.session_state.users[student_name]
+        st.info(f"👤 **{student_name}**, ваши личные успехи: ⭐️ Баллы: **{user_info['score']} XP** | 🃏 Карточек выучено: **{user_info['cards_learned']}** | 📝 Грамматики решено: **{user_info['grammar_solved']}**")
+
+        tab1, tab2 = st.tabs(["🃏 Карточки для запоминания (Flashcards)", "📝 Упражнения по грамматике"])
         words_list = st.session_state.dictionary[selected_unit]
         
+        # --- ВКЛАДКА 1: КАРТОЧКИ (С ПОДУМАТЬ И ПЕРЕВЕРНУТЬ) ---
         with tab1:
-            st.subheader("Изучение новых слов (Англо-Русский словарь)")
-            for i, item in enumerate(words_list):
-                with st.expander(f"Карточка {i+1}: {item['en']} 🇬🇧"):
-                    st.write(f"🇷🇺 Перевод: **{item['ru']}**")
-                    st.caption(f"💡 Пример из книги: *{item['grammar']}*")
-                    if st.button(f"Я выучил это слово! (+10 XP)", key=f"card_{selected_unit}_{i}"):
-                        st.session_state.users[student_name]["score"] += 10
-                        st.success("Отлично! Баллы начислены на ваш баланс.")
-                        
-        with tab2:
-            st.subheader("Закрепление грамматики из книги")
-            current_item = random.choice(words_list)
-            st.markdown(f"**Переведите слово на русский язык:** `{current_item['en']}`")
+            st.subheader("🃏 Карточки слов (Вспомни перевод)")
+            st.write("Посмотрите на слово, подумайте над переводом, а затем нажмите кнопку, чтобы проверить себя!")
             
-            user_ans = st.text_input("Ваш ответ (на русском):", key=f"ans_{selected_unit}")
-            if st.button("Проверить"):
+            # Выбираем текущую карточку через сеанс
+            if f"card_idx_{selected_unit}" not in st.session_state:
+                st.session_state[f"card_idx_{selected_unit}"] = 0
+            
+            idx = st.session_state[f"card_idx_{selected_unit}"]
+            current_card = words_list[idx]
+            
+            # Красивый блок карточки
+            st.markdown(f"""
+            <div style="padding: 30px; border-radius: 10px; background-color: #f0f2f6; text-align: center; border: 2px solid #2e6c80;">
+                <h2>🇬🇧 Английское слово:</h2>
+                <h1 style="color: #2e6c80; font-size: 45px;">{current_card['en']}</h1>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            col_btn1, col_btn2 = st.columns(2)
+            
+            # Состояние переворота карточки
+            if f"show_answer_{selected_unit}_{idx}" not in st.session_state:
+                st.session_state[f"show_answer_{selected_unit}_{idx}"] = False
+                
+            with col_btn1:
+                if st.button("🔄 Перевернуть карточку (Показать ответ)"):
+                    st.session_state[f"show_answer_{selected_unit}_{idx}"] = True
+                    
+            if st.session_state[f"show_answer_{selected_unit}_{idx}"]:
+                st.success(f"🇷🇺 Правильный перевод: **{current_card['ru']}**")
+                st.caption(f"💡 Пример из книги: *{current_card['grammar']}*")
+                
+                if st.button("✅ Я угадал правильно! (+10 XP)"):
+                    st.session_state.users[student_name]["score"] += 10
+                    st.session_state.users[student_name]["cards_learned"] += 1
+                    # Переходим к следующей карточке
+                    st.session_state[f"card_idx_{selected_unit}"] = (idx + 1) % len(words_list)
+                    st.session_state[f"show_answer_{selected_unit}_{idx}"] = False
+                    st.rerun()
+
+        # --- ВКЛАДКА 2: УПРАЖНЕНИЯ ПО ГРАММАТИКЕ СО СТАТИСТИКОЙ ---
+        with tab2:
+            st.subheader("📝 Закрепление грамматики и упражнения")
+            current_item = random.choice(words_list)
+            st.markdown(f"**Напишите перевод слова на русский язык:** `{current_item['en']}`")
+            
+            user_ans = st.text_input("Ваш ответ:", key=f"ans_{selected_unit}")
+            if st.button("Проверить упражнение"):
                 if user_ans.strip().lower() == current_item['ru'].lower():
-                    st.success("Правильно! 🎉 +15 баллов")
+                    st.success("🎉 Правильно! Задание выполнено.")
                     st.session_state.users[student_name]["score"] += 15
+                    st.session_state.users[student_name]["grammar_solved"] += 1
                     st.session_state.users[student_name]["homework"] = "Выполнено (100%)"
                 else:
-                    st.error(f"Неправильно. Правильный ответ: **{current_item['ru']}**")
+                    st.error(f"❌ Неправильно. Правильный ответ: **{current_item['ru']}**")
 
 # ---------------------------------------------------------
 # 3. РЕЙТИНГ И ПРИЗЫ
@@ -136,7 +176,7 @@ elif role == "🏆 Рейтинг и Призы":
     
     for rank, (name, info) in enumerate(sorted_users):
         medal = medals[rank] if rank < 3 else "🏅"
-        st.markdown(f"### {medal} **{rank+1} место:** {name} — **{info['score']} баллов (XP)**")
+        st.markdown(f"### {medal} **{rank+1} место:** {name} — **{info['score']} баллов (XP)** (Карточек: {info['cards_learned']}, Грамматика: {info['grammar_solved']})")
         
         if rank == 0:
             st.balloons()
