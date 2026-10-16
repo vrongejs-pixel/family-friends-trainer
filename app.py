@@ -9,7 +9,7 @@ def init_progress(user_name):
     if "progress" not in st.session_state.users[user_name]:
         st.session_state.users[user_name]["progress"] = {}
 
-# Инициализация базы данных: добавлен словарь "progress" для 40 вопросов
+# Инициализация базы данных
 if "users" not in st.session_state:
     st.session_state.users = {
         "Алишер": {"score": 120, "level": 2, "progress": {"Starter Unit": 40, "Unit 1": 15}},
@@ -78,6 +78,16 @@ if "dictionary" not in st.session_state:
         }
     }
 
+# Функция для создания кнопки озвучки
+def text_to_speech_button(text):
+    html = f"""
+    <button onclick="let u = new SpeechSynthesisUtterance('{text}'); u.lang = 'en-US'; window.speechSynthesis.speak(u);" 
+    style="background-color:#4CAF50; color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer; font-size:16px;">
+        🔊 Послушать: {text}
+    </button>
+    """
+    return html
+
 # --- ШАПКА ---
 st.markdown("<h1 style='text-align: center; color: #2e6c80;'>✨ Интерактивная обучающая платформа Family and Friends 2</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center; color: #555;'>Инновационная методика учителя школы №20 <b>Алимжановой Лайло Хамадуллаевной</b></h3>", unsafe_allow_html=True)
@@ -116,7 +126,7 @@ elif role == "👦 Режим ученика":
 
         tab1, tab2 = st.tabs(["🃏 Словарь (Свободный доступ)", "🔥 Марафон грамматики (40 вопросов)"])
         
-        # Вкладка 1: Карточки с красивым дизайном
+        # Вкладка 1: Карточки с озвучкой
         with tab1:
             st.subheader("🃏 Карточки слов")
             words_list = unit_data["words"]
@@ -130,13 +140,11 @@ elif role == "👦 Режим ученика":
                 
             current_card = words_list[idx]
             
-            # Состояние переворота карточки
             if f"is_flipped_{selected_unit}_{idx}" not in st.session_state:
                 st.session_state[f"is_flipped_{selected_unit}_{idx}"] = False
             
             is_flipped = st.session_state[f"is_flipped_{selected_unit}_{idx}"]
             
-            # CSS дизайн для центрированной карточки
             st.markdown("""
             <style>
             .card-container { display: flex; justify-content: center; align-items: center; margin: 20px 0; }
@@ -154,6 +162,12 @@ elif role == "👦 Режим ученика":
             title_display = "RUS (Перевод):" if is_flipped else "ENG (Слово):"
             
             st.markdown(f'<div class="card-container"><div class="flashcard"><div class="card-title">{title_display}</div><div class="card-word">{word_display}</div></div></div>', unsafe_allow_html=True)
+            
+            # Кнопка озвучки (только когда показывается английское слово)
+            if not is_flipped:
+                st.components.v1.html(text_to_speech_button(current_card['en']), height=60)
+            else:
+                st.write("") # Пустое место для выравнивания
             
             col1, col2 = st.columns(2)
             with col1:
