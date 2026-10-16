@@ -2,8 +2,8 @@ import streamlit as st
 import pandas as pd
 import random
 
-# Настройка страницы
-st.set_page_title("Family & Friends 2 Trainer | Методика Лайло Алимжановой", page_icon="🎒", layout="wide")
+# Настройка страницы (исправлено)
+st.set_page_config(page_title="Family & Friends 2 Trainer | Методика Лайло Алимжановой", page_icon="🎒", layout="wide")
 
 # Инициализация базы данных в памяти сессии
 if "users" not in st.session_state:
