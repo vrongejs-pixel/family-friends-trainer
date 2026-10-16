@@ -3,7 +3,7 @@ import pandas as pd
 import random
 
 # Настройка страницы
-st.set_page_config(page_title="Family & Friends 2 Trainer | Методика Лайло Алимжановой", page_icon="🎒", layout="wide")
+st.set_page_config(page_title="Family & Friends 2 Trainer | Методика Алимжановой Л.Х.", page_icon="🎒", layout="wide")
 
 # Инициализация базы данных учеников и статистики
 if "users" not in st.session_state:
@@ -217,9 +217,9 @@ if "dictionary" not in st.session_state:
         }
     }
 
-# --- АВТОРСКАЯ ШАПКА ПРИЛОЖЕНИЯ ---
-st.markdown("<h1 style='text-align: center; color: #2e6c80;'>🎒 Family and Friends 2 — Интерактивный тренажер</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center; color: #555;'>Методика и исследования учителя английского языка школы №20 <b>Лайло Алимжановой</b></h3>", unsafe_allow_html=True)
+# --- АВТОРСКАЯ ШАПКА ПРИЛОЖЕНИЯ (ВАРИАНТ 2) ---
+st.markdown("<h1 style='text-align: center; color: #2e6c80;'>✨ Интерактивная обучающая платформа по курсу Family and Friends 2</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color: #555;'>Инновационная методика преподавания английского языка учителя средней школы №20 <b>Алимжановой Лайло Хамадуллаевной</b></h3>", unsafe_allow_html=True)
 st.markdown("---")
 
 role = st.sidebar.radio("Выберите режим:", ["👦 Режим ученика (Тренажер)", "👨‍🏫 Кабинет преподавателя", "🏆 Рейтинг и Призы"])
@@ -229,6 +229,7 @@ role = st.sidebar.radio("Выберите режим:", ["👦 Режим уче
 # ---------------------------------------------------------
 if role == "👨‍🏫 Кабинет преподавателя":
     st.title("👨‍🏫 Кабинет преподавателя")
+    st.info("Раздел для автора методики — Алимжановой Лайло Хамадуллаевной.")
     password = st.text_input("Введите пароль преподавателя:", type="password")
     
     if password == "school20":
@@ -376,4 +377,4 @@ elif role == "🏆 Рейтинг и Призы":
         st.markdown(f"### {medal} {rank+1} место: {name} — **{info['score']} XP** (Карточки: {info['cards_learned']}, Грамматика: {info['grammar_solved']})")
         if rank == 0:
             st.balloons()
-            st.success("🎁 Главный приз от Лайло Алимжановой — Книга комиксов на английском языке!")
+            st.success("🎁 Главный приз от Алимжановой Лайло Хамадуллаевной — Книга комиксов на английском языке!")
