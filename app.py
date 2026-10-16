@@ -4,18 +4,13 @@ import random
 
 st.set_page_config(page_title="Family & Friends 2 Trainer | Методика Алимжановой Л.Х.", page_icon="🎒", layout="wide")
 
-# Функция для безопасного создания прогресса нового ученика
 def init_progress(user_name):
     if "progress" not in st.session_state.users[user_name]:
         st.session_state.users[user_name]["progress"] = {}
 
-# Инициализация базы данных: добавлен словарь "progress" для 40 вопросов
+# Инициализация пустой базы данных (тестовые ученики удалены)
 if "users" not in st.session_state:
-    st.session_state.users = {
-        "Алишер": {"score": 120, "level": 2, "progress": {"Starter Unit": 40, "Unit 1": 15}},
-        "Мадина": {"score": 150, "level": 3, "progress": {"Starter Unit": 40, "Unit 1": 40, "Unit 2": 5}},
-        "Тимур": {"score": 90, "level": 1, "progress": {"Starter Unit": 0}}
-    }
+    st.session_state.users = {}
 
 for u in st.session_state.users:
     init_progress(u)
@@ -263,24 +258,60 @@ if role == "👨‍🏫 Кабинет преподавателя":
     st.title("👨‍🏫 Кабинет преподавателя")
     password = st.text_input("Введите пароль:", type="password")
     
-    # Ваш новый пароль
     if password == "lx890723":
-        new_student = st.text_input("Имя нового ученика:")
-        if st.button("Зарегистрировать"):
-            if new_student and new_student not in st.session_state.users:
-                st.session_state.users[new_student] = {"score": 0, "level": 1, "progress": {}}
-                init_progress(new_student)
-                st.success(f"Ученик {new_student} добавлен!")
+        st.success("Доступ разрешен!")
         
-        report = [{"Ученик": k, "XP (Общий балл)": v["score"], "Открытый уровень": v["level"]} for k, v in st.session_state.users.items()]
-        st.dataframe(pd.DataFrame(report))
+        st.subheader("➕ Добавить нового ученика")
+        col1, col2 = st.columns(2)
+        with col1:
+            new_student = st.text_input("Имя нового ученика:")
+            if st.button("Зарегистрировать"):
+                if new_student and new_student not in st.session_state.users:
+                    st.session_state.users[new_student] = {"score": 0, "level": 1, "progress": {}}
+                    init_progress(new_student)
+                    st.success(f"Ученик {new_student} добавлен!")
+                    st.rerun()
+                elif new_student in st.session_state.users:
+                    st.warning("Такое имя уже существует.")
+        
+        st.markdown("---")
+        st.subheader("⚙️ Управление учениками (Редактировать / Удалить)")
+        if st.session_state.users:
+            col_edit1, col_edit2, col_edit3 = st.columns(3)
+            with col_edit1:
+                student_to_manage = st.selectbox("Выберите ученика:", list(st.session_state.users.keys()))
+            with col_edit2:
+                new_name = st.text_input("Новое имя (если была ошибка):", value=student_to_manage)
+                if st.button("💾 Сохранить имя"):
+                    if new_name and new_name != student_to_manage:
+                        if new_name not in st.session_state.users:
+                            st.session_state.users[new_name] = st.session_state.users.pop(student_to_manage)
+                            st.success(f"Имя изменено на {new_name}!")
+                            st.rerun()
+                        else:
+                            st.error("Ученик с таким именем уже существует!")
+            with col_edit3:
+                st.write("")
+                st.write("")
+                if st.button("❌ Удалить ученика"):
+                    del st.session_state.users[student_to_manage]
+                    st.success("Ученик удален!")
+                    st.rerun()
+            
+            st.markdown("---")
+            st.subheader("📊 Отчет по успеваемости")
+            report = [{"Ученик": k, "XP (Общий балл)": v["score"], "Открытый уровень": v["level"]} for k, v in st.session_state.users.items()]
+            st.dataframe(pd.DataFrame(report), use_container_width=True)
+        else:
+            st.info("В базе пока нет учеников. Добавьте их в меню выше.")
+            
     elif password != "":
         st.error("Неверный пароль!")
 
 # --- РЕЖИМ УЧЕНИКА ---
 elif role == "👦 Режим ученика":
     if not st.session_state.users:
-        st.warning("Список учеников пуст.")
+        st.warning("В системе нет учеников. Попросите преподавателя добавить ваше имя.")
     else:
         student_name = st.selectbox("Ваше имя:", list(st.session_state.users.keys()))
         selected_unit = st.selectbox("Выберите урок:", list(st.session_state.dictionary.keys()))
@@ -292,7 +323,7 @@ elif role == "👦 Режим ученика":
 
         tab1, tab2 = st.tabs(["🃏 Словарь (Свободный доступ)", "🔥 Марафон грамматики (40 вопросов)"])
         
-        # Вкладка 1: Карточки
+        # Вкладка 1: Карточки с красивым дизайном и озвучкой
         with tab1:
             st.subheader("🃏 Карточки слов")
             words_list = unit_data["words"]
@@ -345,7 +376,7 @@ elif role == "👦 Режим ученика":
                     st.session_state[f"c_idx_{selected_unit}"] = (idx + 1) % len(words_list)
                     st.rerun()
 
-        # Вкладка 2: Марафон
+        # Вкладка 2: Марафон 40 вопросов
         with tab2:
             st.subheader("🔥 Марафон: Докажи, что знаешь правило!")
             
