@@ -10,13 +10,13 @@ if "users" not in st.session_state:
     st.session_state.users = {
         "Алишер": {"score": 120, "cards_learned": 15, "grammar_solved": 8, "homework": "Выполнено (95%)", "unit": "Unit 1"},
         "Мадина": {"score": 150, "cards_learned": 22, "grammar_solved": 14, "homework": "Выполнено (100%)", "unit": "Unit 2"},
-        "Тимур": {"score": 90, "cards_learned": 8, "grammar_solved": 5, "homework": "Не выполнено", "unit": "Starter"}
+        "Тимур": {"score": 90, "cards_learned": 8, "grammar_solved": 5, "homework": "Не выполнено", "unit": "Starter Unit"}
     }
 
 # СТРОГАЯ БАЗА СЛОВ И ГРАММАТИЧЕСКИХ ЗАДАНИЙ ИЗ КНИГИ (Let's learn! & Write)
 if "dictionary" not in st.session_state:
     st.session_state.dictionary = {
-        "Starter Unit (Welcome back!)": {
+        "Starter Unit": {
             "words": [
                 {"en": "mum", "ru": "мама"}, {"en": "dad", "ru": "папа"}, {"en": "brother", "ru": "брат"},
                 {"en": "sister", "ru": "сестра"}, {"en": "grandma", "ru": "бабушка"}, {"en": "grandpa", "ru": "дедушка"}
@@ -29,7 +29,7 @@ if "dictionary" not in st.session_state:
                 {"task": "Вставьте правильную форму: She [...] curly hair.", "answer": "'s got"}
             ]
         },
-        "Unit 1 (Our new things)": {
+        "Unit 1": {
             "words": [
                 {"en": "classroom", "ru": "класс (комната)"}, {"en": "table", "ru": "стол"}, {"en": "computer", "ru": "компьютер"},
                 {"en": "peg", "ru": "вешалка"}, {"en": "pencil case", "ru": "пенал"}, {"en": "board", "ru": "доска"}
@@ -37,13 +37,13 @@ if "dictionary" not in st.session_state:
             "rule_title": "Грамматика: This / That / These / Those",
             "rule_text": "Указательные местоимения (стр. 9):\n- **This** is the new computer. (Это — ед.ч., близко)\n- **That** is a new board. (То — ед.ч., далеко)\n- **These** are new tables. (Эти — мн.ч., близко)\n- **Those** are new pegs. (Те — мн.ч., далеко)",
             "grammar_tasks": [
-                {"task": "Вставьте (This / That / These / Those): [...] is the new computer. (близко, ед.ч.)", "answer": "this"},
-                {"task": "Вставьте (This / That / These / Those): [...] is a new board. (далеко, ед.ч.)", "answer": "that"},
-                {"task": "Вставьте (This / That / These / Those): [...] are new tables. (близко, мн.ч.)", "answer": "these"},
-                {"task": "Вставьте (This / That / These / Those): [...] are new pegs. (далеко, мн.ч.)", "answer": "those"}
+                {"task": "Вставьте (This / That / These / Those): [...] is the new computer. (близко, ед.ч.)", "answer": "This"},
+                {"task": "Вставьте (This / That / These / Those): [...] is a new board. (далеко, ед.ч.)", "answer": "That"},
+                {"task": "Вставьте (This / That / These / Those): [...] are new tables. (близко, мн.ч.)", "answer": "These"},
+                {"task": "Вставьте (This / That / These / Those): [...] are new pegs. (далеко, мн.ч.)", "answer": "Those"}
             ]
         },
-        "Unit 2 (They're happy now!)": {
+        "Unit 2": {
             "words": [
                 {"en": "hot", "ru": "жарко"}, {"en": "cold", "ru": "холодно"}, {"en": "hungry", "ru": "голодный"},
                 {"en": "thirsty", "ru": "хочу пить"}, {"en": "happy", "ru": "счастливый"}, {"en": "sad", "ru": "грустный"}
@@ -57,7 +57,7 @@ if "dictionary" not in st.session_state:
                 {"task": "Ответьте на вопрос (Are they cold?): No, they [...].", "answer": "aren't"}
             ]
         },
-        "Unit 3 (I can ride a bike!)": {
+        "Unit 3": {
             "words": [
                 {"en": "ride a bike", "ru": "кататься на велосипеде"}, {"en": "skate", "ru": "кататься на коньках"},
                 {"en": "skateboard", "ru": "кататься на скейтборде"}, {"en": "play tennis", "ru": "играть в теннис"}
@@ -71,7 +71,7 @@ if "dictionary" not in st.session_state:
                 {"task": "Ответьте на вопрос (Can she play tennis?): Yes, she [...].", "answer": "can"}
             ]
         },
-        "Unit 4 (Have you got a milkshake?)": {
+        "Unit 4": {
             "words": [
                 {"en": "salad", "ru": "салат"}, {"en": "fries", "ru": "картофель фри"}, {"en": "pizza", "ru": "пицца"},
                 {"en": "milkshake", "ru": "молочный коктейль"}, {"en": "cheese sandwich", "ru": "бутерброд с сыром"}
@@ -141,9 +141,9 @@ elif role == "👦 Режим ученика (Тренажер)":
         tab1, tab2 = st.tabs(["🃏 Компактные карточки слов", "📝 Тренажер грамматики из книги"])
         unit_data = st.session_state.dictionary[selected_unit]
         
-        # --- ВКЛАДКА 1: КАРТОЧКИ СЛОВ (ИЗ УРОКА 1) ---
+        # --- ВКЛАДКА 1: КАРТОЧКИ СЛОВ ---
         with tab1:
-            st.subheader("🃏 Карточки для запоминания слов (Lesson One: Words)")
+            st.subheader("🃏 Карточки для запоминания слов")
             words_list = unit_data["words"]
             
             if f"card_idx_{selected_unit}" not in st.session_state:
@@ -192,7 +192,7 @@ elif role == "👦 Режим ученика (Тренажер)":
                     st.session_state[f"card_idx_{selected_unit}"] = (idx + 1) % len(words_list)
                     st.rerun()
 
-        # --- ВКЛАДКА 2: ГРАММАТИЧЕСКИЙ ТРЕНАЖЕР (Lesson Two: Grammar) ---
+        # --- ВКЛАДКА 2: ГРАММАТИЧЕСКИЙ ТРЕНАЖЕР ---
         with tab2:
             st.subheader("📝 Упражнения по грамматике из учебника")
             
@@ -201,7 +201,6 @@ elif role == "👦 Режим ученика (Тренажер)":
                 st.markdown(unit_data['rule_text'])
             
             if "grammar_tasks" in unit_data:
-                # Берем случайное грамматическое задание для этого юнита
                 if f"gram_idx_{selected_unit}" not in st.session_state:
                     st.session_state[f"gram_idx_{selected_unit}"] = random.randint(0, len(unit_data["grammar_tasks"]) - 1)
                 
@@ -214,4 +213,27 @@ elif role == "👦 Режим ученика (Тренажер)":
                 
                 if st.button("Проверить упражнение"):
                     if user_ans.strip().lower() == task_item['answer'].lower():
-                        st.success("🎉 Верно! Вы отлично
+                        st.success("🎉 Верно! Вы отлично усвоили правило.")
+                        st.session_state.users[student_name]["score"] += 15
+                        st.session_state.users[student_name]["grammar_solved"] += 1
+                        st.session_state.users[student_name]["homework"] = "Выполнено (100%)"
+                        st.session_state[f"gram_idx_{selected_unit}"] = random.randint(0, len(unit_data["grammar_tasks"]) - 1)
+                    else:
+                        st.error(f"❌ Неверно. Правильный ответ: **{task_item['answer']}**")
+            else:
+                st.info("Для этого юнита упражнения загружаются...")
+
+# ---------------------------------------------------------
+# 3. РЕЙТИНГ И ПРИЗЫ
+# ---------------------------------------------------------
+elif role == "🏆 Рейтинг и Призы":
+    st.title("🏆 Доска почета и призы по итогам курса")
+    sorted_users = sorted(st.session_state.users.items(), key=lambda x: x[1]["score"], reverse=True)
+    medals = ["🥇", "🥈", "🥉"]
+    
+    for rank, (name, info) in enumerate(sorted_users):
+        medal = medals[rank] if rank < 3 else "🏅"
+        st.markdown(f"### {medal} {rank+1} место: {name} — **{info['score']} XP** (Карточки: {info['cards_learned']}, Грамматика: {info['grammar_solved']})")
+        if rank == 0:
+            st.balloons()
+            st.success("🎁 Главный приз от Алимжановой Лайло Хамадуллаевны — Книга комиксов на английском языке!")
