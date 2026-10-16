@@ -40,7 +40,7 @@ if "dictionary" not in st.session_state:
                 {"en": "gloves", "ru": "перчатки"},
                 {"en": "jeans", "ru": "джинсы"}
             ],
-            "rule_title": "Грамматика: Что ты ноишь (Present Continuous)",
+            "rule_title": "Грамматика: Что ты носишь (Present Continuous)",
             "rule_text": "Для описания одежды в данный момент используем глагол *to be + verb-ing*:\n- *What are you wearing?* — *I'm wearing a blue skirt.*\n- *What's he wearing?* — *He's wearing red gloves.*"
         },
         "Unit 13 (Comparisons)": {
@@ -114,7 +114,6 @@ elif role == "👦 Режим ученика (Тренажер)":
             
             is_flipped = st.session_state[f"is_flipped_{selected_unit}_{idx}"]
             
-            # CSS для красивой компактной карточки по центру с анимацией переворота
             st.markdown("""
             <style>
             .card-container {
@@ -137,7 +136,6 @@ elif role == "👦 Режим ученика (Тренажер)":
                 font-family: sans-serif;
                 text-align: center;
                 padding: 20px;
-                transition: transform 0.6s;
             }
             .card-title {
                 font-size: 16px;
@@ -151,7 +149,6 @@ elif role == "👦 Режим ученика (Тренажер)":
             </style>
             """, unsafe_allow_html=True)
             
-            # Отображение лицевой или оборотной стороны карточки
             word_display = current_card['ru'] if is_flipped else current_card['en']
             title_display = "🇷🇺 Перевод на русском:" if is_flipped else "🇬🇧 Английское слово:"
             
@@ -181,7 +178,6 @@ elif role == "👦 Режим ученика (Тренажер)":
         with tab2:
             st.subheader("📝 Упражнения по грамматике и лексике")
             
-            # Кнопка подсказки (теория и примеры по аналогии с приложением)
             with st.expander("💡 Нажмите здесь, чтобы открыть Подсказку и Правило по уроку"):
                 st.markdown(f"### {unit_data['rule_title']}")
                 st.markdown(unit_data['rule_text'])
@@ -209,7 +205,7 @@ elif role == "🏆 Рейтинг и Призы":
     
     for rank, (name, info) in enumerate(sorted_users):
         medal = medals[rank] if rank < 3 else "🏅"
-        st.markdown(### `{medal} {rank+1} место: {name}` — **{info['score']} XP** (Карточки: {info['cards_learned']}, Грамматика: {info['grammar_solved']})")
+        st.markdown(f"### {medal} {rank+1} место: {name} — **{info['score']} XP** (Карточки: {info['cards_learned']}, Грамматика: {info['grammar_solved']})")
         if rank == 0:
             st.balloons()
             st.success("🎁 Главный приз от Лайло Алимжановой — Книга комиксов на английском языке!")
