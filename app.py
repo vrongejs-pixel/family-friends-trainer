@@ -5,235 +5,77 @@ import random
 # Настройка страницы
 st.set_page_config(page_title="Family & Friends 2 Trainer | Методика Алимжановой Л.Х.", page_icon="🎒", layout="wide")
 
-# Инициализация базы данных учеников и статистики
+# Список уроков по порядку (для системы замков)
+UNITS = ["Starter Unit", "Unit 1", "Unit 2", "Unit 3", "Unit 4"]
+
+# Инициализация базы данных учеников (добавлен прогресс от 0 до 40 для каждого урока)
 if "users" not in st.session_state:
     st.session_state.users = {
-        "Алишер": {"score": 120, "cards_learned": 15, "grammar_solved": 8, "homework": "Выполнено (95%)", "unit": "Unit 1"},
-        "Мадина": {"score": 150, "cards_learned": 22, "grammar_solved": 14, "homework": "Выполнено (100%)", "unit": "Unit 2"},
-        "Тимур": {"score": 90, "cards_learned": 8, "grammar_solved": 5, "homework": "Не выполнено", "unit": "Starter Unit"}
+        "Алишер": {"score": 120, "cards": 15, "homework": "Выполнено", "progress": {"Starter Unit": 40, "Unit 1": 15, "Unit 2": 0, "Unit 3": 0, "Unit 4": 0}},
+        "Мадина": {"score": 350, "cards": 40, "homework": "Выполнено", "progress": {"Starter Unit": 40, "Unit 1": 40, "Unit 2": 40, "Unit 3": 0, "Unit 4": 0}},
+        "Тимур": {"score": 10, "cards": 5, "homework": "Не выполнено", "progress": {"Starter Unit": 5, "Unit 1": 0, "Unit 2": 0, "Unit 3": 0, "Unit 4": 0}}
     }
 
-# СТРОГАЯ БАЗА СЛОВ И ГРАММАТИЧЕСКИХ ЗАДАНИЙ ИЗ КНИГИ (Let's learn! & Write)
+# Словари лексики (Карточки) и Теории
 if "dictionary" not in st.session_state:
     st.session_state.dictionary = {
         "Starter Unit": {
-            "words": [
-                {"en": "mum", "ru": "мама"}, {"en": "dad", "ru": "папа"}, {"en": "brother", "ru": "брат"},
-                {"en": "sister", "ru": "сестра"}, {"en": "grandma", "ru": "бабушка"}, {"en": "grandpa", "ru": "дедушка"}
-            ],
-            "rule_title": "Грамматика: I've got / He's got / She's got",
-            "rule_text": "Используйте **'ve got** (have got) для I/you/we/they и **'s got** (has got) для he/she/it.\n\n*Примеры:*\n- I've got brown hair.\n- He's got green eyes.",
-            "grammar_tasks": [
-                {"task": "Вставьте правильную форму: I [...] brown hair.", "answer": "'ve got"},
-                {"task": "Вставьте правильную форму: He [...] green eyes.", "answer": "'s got"},
-                {"task": "Вставьте правильную форму: She [...] curly hair.", "answer": "'s got"}
-            ]
+            "words": [{"en": "mum", "ru": "мама"}, {"en": "dad", "ru": "папа"}, {"en": "brother", "ru": "брат"}, {"en": "sister", "ru": "сестра"}],
+            "rule": "Используйте **'ve got** (have got) для I/you/we/they и **'s got** (has got) для he/she/it."
         },
         "Unit 1": {
-            "words": [
-                {"en": "classroom", "ru": "класс (комната)"}, {"en": "table", "ru": "стол"}, {"en": "computer", "ru": "компьютер"},
-                {"en": "peg", "ru": "вешалка"}, {"en": "pencil case", "ru": "пенал"}, {"en": "board", "ru": "доска"}
-            ],
-            "rule_title": "Грамматика: This / That / These / Those",
-            "rule_text": "Указательные местоимения (стр. 9):\n- **This** is the new computer. (Это — ед.ч., близко)\n- **That** is a new board. (То — ед.ч., далеко)\n- **These** are new tables. (Эти — мн.ч., близко)\n- **Those** are new pegs. (Те — мн.ч., далеко)",
-            "grammar_tasks": [
-                {"task": "Вставьте (This / That / These / Those): [...] is the new computer. (близко, ед.ч.)", "answer": "This"},
-                {"task": "Вставьте (This / That / These / Those): [...] is a new board. (далеко, ед.ч.)", "answer": "That"},
-                {"task": "Вставьте (This / That / These / Those): [...] are new tables. (близко, мн.ч.)", "answer": "These"},
-                {"task": "Вставьте (This / That / These / Those): [...] are new pegs. (далеко, мн.ч.)", "answer": "Those"}
-            ]
+            "words": [{"en": "classroom", "ru": "класс"}, {"en": "table", "ru": "стол"}, {"en": "computer", "ru": "компьютер"}, {"en": "peg", "ru": "вешалка"}, {"en": "board", "ru": "доска"}],
+            "rule": "**This** (это, ед.ч. близко), **That** (то, ед.ч. далеко), **These** (эти, мн.ч. близко), **Those** (те, мн.ч. далеко)."
         },
         "Unit 2": {
-            "words": [
-                {"en": "hot", "ru": "жарко"}, {"en": "cold", "ru": "холодно"}, {"en": "hungry", "ru": "голодный"},
-                {"en": "thirsty", "ru": "хочу пить"}, {"en": "happy", "ru": "счастливый"}, {"en": "sad", "ru": "грустный"}
-            ],
-            "rule_title": "Грамматика: We're / They're & Are they...?",
-            "rule_text": "Глагол to be во множественном числе (стр. 15):\n- We're = We are (Мы)\n- They're = They are (Они)\n*Вопросы и ответы:*\n- Are they hot? No, they aren't.\n- Are they happy? Yes, they are.",
-            "grammar_tasks": [
-                {"task": "Напишите сокращение для 'They are': [...]", "answer": "they're"},
-                {"task": "Напишите сокращение для 'We are': [...]", "answer": "we're"},
-                {"task": "Ответьте на вопрос (Are they hot?): Yes, they [...].", "answer": "are"},
-                {"task": "Ответьте на вопрос (Are they cold?): No, they [...].", "answer": "aren't"}
-            ]
+            "words": [{"en": "hot", "ru": "жарко"}, {"en": "cold", "ru": "холодно"}, {"en": "hungry", "ru": "голодный"}, {"en": "thirsty", "ru": "хочу пить"}, {"en": "happy", "ru": "счастливый"}, {"en": "sad", "ru": "грустный"}],
+            "rule": "**We're** = We are (Мы), **They're** = They are (Они). Вопросы: **Are they** hot? Yes, they are / No, they aren't."
         },
         "Unit 3": {
-            "words": [
-                {"en": "ride a bike", "ru": "кататься на велосипеде"}, {"en": "skate", "ru": "кататься на коньках"},
-                {"en": "skateboard", "ru": "кататься на скейтборде"}, {"en": "play tennis", "ru": "играть в теннис"}
-            ],
-            "rule_title": "Грамматика: Can / Can't",
-            "rule_text": "Выражение умений (стр. 21):\n- I **can** skate. (Я умею)\n- I **can't** skateboard. (Я не умею)\n- **Can** he ride a bike? No, he can't.\n- **Can** she play tennis? Yes, she can.",
-            "grammar_tasks": [
-                {"task": "Вставьте (can / can't): He [...] ride a bike. (Умеет)", "answer": "can"},
-                {"task": "Вставьте (can / can't): He [...] ride a horse. (Не умеет)", "answer": "can't"},
-                {"task": "Вставьте (can / can't): They [...] play football. (Не умеют)", "answer": "can't"},
-                {"task": "Ответьте на вопрос (Can she play tennis?): Yes, she [...].", "answer": "can"}
-            ]
+            "words": [{"en": "ride a bike", "ru": "кататься на велосипеде"}, {"en": "skate", "ru": "кататься на коньках"}, {"en": "play tennis", "ru": "играть в теннис"}],
+            "rule": "Выражение умений: **can** (умею), **can't** (не умею). Вопрос: **Can she** skate? Yes, she can / No, she can't."
         },
         "Unit 4": {
-            "words": [
-                {"en": "salad", "ru": "салат"}, {"en": "fries", "ru": "картофель фри"}, {"en": "pizza", "ru": "пицца"},
-                {"en": "milkshake", "ru": "молочный коктейль"}, {"en": "cheese sandwich", "ru": "бутерброд с сыром"}
-            ],
-            "rule_title": "Грамматика: Have you got...? / Has he got...?",
-            "rule_text": "Вопросы о наличии (стр. 31):\n- **Have you got** a milkshake? Yes, I have. / No, I haven't.\n- **Has he got** a cheese sandwich? Yes, he has.\n- **Has she got** a pizza? No, she hasn't.",
-            "grammar_tasks": [
-                {"task": "Ответьте на вопрос (Have you got a milkshake?): Yes, I [...].", "answer": "have"},
-                {"task": "Ответьте на вопрос (Have you got fries?): No, I [...].", "answer": "haven't"},
-                {"task": "Ответьте на вопрос (Has he got a cheese sandwich?): Yes, he [...].", "answer": "has"},
-                {"task": "Ответьте на вопрос (Has she got a pizza?): No, she [...].", "answer": "hasn't"}
-            ]
+            "words": [{"en": "salad", "ru": "салат"}, {"en": "fries", "ru": "картофель фри"}, {"en": "pizza", "ru": "пицца"}, {"en": "milkshake", "ru": "молочный коктейль"}],
+            "rule": "Вопросы о наличии еды: **Have you got...?** Yes, I have / No, I haven't. **Has he got...?** Yes, he has / No, he hasn't."
         }
     }
 
-# --- АВТОРСКАЯ ШАПКА ПРИЛОЖЕНИЯ ---
-st.markdown("<h1 style='text-align: center; color: #2e6c80;'>✨ Интерактивная обучающая платформа Family and Friends 2</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center; color: #555;'>Инновационная методика учителя английского языка школы №20 <b>Алимжановой Лайло Хамадуллаевной</b></h3>", unsafe_allow_html=True)
-st.markdown("---")
-
-role = st.sidebar.radio("Выберите режим:", ["👦 Режим ученика (Тренажер)", "👨‍🏫 Кабинет преподавателя", "🏆 Рейтинг и Призы"])
-
-# ---------------------------------------------------------
-# 1. КАБИНЕТ ПРЕПОДАВАТЕЛЯ
-# ---------------------------------------------------------
-if role == "👨‍🏫 Кабинет преподавателя":
-    st.title("👨‍🏫 Кабинет преподавателя")
-    st.info("Раздел для автора методики — Алимжановой Лайло Хамадуллаевной.")
-    password = st.text_input("Введите пароль преподавателя:", type="password")
-    
-    if password == "school20":
-        st.success("Доступ разрешен!")
-        
-        st.subheader("➕ Добавить нового ученика")
-        col1, col2 = st.columns(2)
-        with col1:
-            new_student_name = st.text_input("Имя нового ученика:")
-            if st.button("Зарегистрировать ученика"):
-                if new_student_name and new_student_name not in st.session_state.users:
-                    st.session_state.users[new_student_name] = {"score": 0, "cards_learned": 0, "grammar_solved": 0, "homework": "Не начато", "unit": "Unit 1"}
-                    st.success(f"Ученик {new_student_name} успешно добавлен!")
-                else:
-                    st.warning("Введите имя или такое имя уже существует.")
-        
-        st.subheader("📊 Отчет по успеваемости и практике")
-        report_data = [{"Ученик": name, "Баллы (XP)": info["score"], "Выучено карточек": info["cards_learned"], "Решено грамматики": info["grammar_solved"], "Статус ДЗ": info["homework"]} for name, info in st.session_state.users.items()]
-        st.dataframe(pd.DataFrame(report_data), use_container_width=True)
-        
-    elif password != "":
-        st.error("Неверный пароль!")
-
-# ---------------------------------------------------------
-# 2. РЕЖИМ УЧЕНИКА
-# ---------------------------------------------------------
-elif role == "👦 Режим ученика (Тренажер)":
-    st.title("🎮 Ученический тренажер слов и грамматики")
-    
-    if not st.session_state.users:
-        st.warning("Список учеников пуст. Попросите преподавателя добавить ваше имя.")
-    else:
-        student_name = st.selectbox("Выберите ваше имя:", list(st.session_state.users.keys()))
-        selected_unit = st.selectbox("Выберите юнит из книги:", list(st.session_state.dictionary.keys()))
-        
-        user_info = st.session_state.users[student_name]
-        st.info(f"👤 **{student_name}** | ⭐️ Баллы: **{user_info['score']} XP** | 🃏 Выучено карточек: **{user_info['cards_learned']}** | 📝 Решено грамматики: **{user_info['grammar_solved']}**")
-
-        tab1, tab2 = st.tabs(["🃏 Компактные карточки слов", "📝 Тренажер грамматики из книги"])
-        unit_data = st.session_state.dictionary[selected_unit]
-        
-        # --- ВКЛАДКА 1: КАРТОЧКИ СЛОВ ---
-        with tab1:
-            st.subheader("🃏 Карточки для запоминания слов")
-            words_list = unit_data["words"]
-            
-            if f"card_idx_{selected_unit}" not in st.session_state:
-                st.session_state[f"card_idx_{selected_unit}"] = 0
-            
-            idx = st.session_state[f"card_idx_{selected_unit}"]
-            if idx >= len(words_list):
-                idx = 0
-                st.session_state[f"card_idx_{selected_unit}"] = 0
-                
-            current_card = words_list[idx]
-            
-            if f"is_flipped_{selected_unit}_{idx}" not in st.session_state:
-                st.session_state[f"is_flipped_{selected_unit}_{idx}"] = False
-            
-            is_flipped = st.session_state[f"is_flipped_{selected_unit}_{idx}"]
-            
-            st.markdown("""
-            <style>
-            .card-container { display: flex; justify-content: center; align-items: center; margin: 20px 0; }
-            .flashcard {
-                width: 350px; height: 180px; background: linear-gradient(135deg, #2e6c80 0%, #4682b4 100%);
-                color: white; border-radius: 15px; display: flex; flex-direction: column; justify-content: center;
-                align-items: center; box-shadow: 0 8px 16px rgba(0,0,0,0.2); font-family: sans-serif; text-align: center; padding: 20px;
-            }
-            .card-title { font-size: 14px; opacity: 0.8; margin-bottom: 8px; }
-            .card-word { font-size: 32px; font-weight: bold; }
-            </style>
-            """, unsafe_allow_html=True)
-            
-            word_display = current_card['ru'] if is_flipped else current_card['en']
-            title_display = "🇷🇺 Перевод на русском:" if is_flipped else "🇬🇧 Английское слово из книги:"
-            
-            st.markdown(f'<div class="card-container"><div class="flashcard"><div class="card-title">{title_display}</div><div class="card-word">{word_display}</div></div></div>', unsafe_allow_html=True)
-            
-            col_c1, col_c2 = st.columns(2)
-            with col_c1:
-                if st.button("🔄 Перевернуть карточку"):
-                    st.session_state[f"is_flipped_{selected_unit}_{idx}"] = not is_flipped
-                    st.rerun()
-            with col_c2:
-                if is_flipped and st.button("✅ Я вспомнил (+10 XP)"):
-                    st.session_state.users[student_name]["score"] += 10
-                    st.session_state.users[student_name]["cards_learned"] += 1
-                    st.session_state[f"is_flipped_{selected_unit}_{idx}"] = False
-                    st.session_state[f"card_idx_{selected_unit}"] = (idx + 1) % len(words_list)
-                    st.rerun()
-
-        # --- ВКЛАДКА 2: ГРАММАТИЧЕСКИЙ ТРЕНАЖЕР ---
-        with tab2:
-            st.subheader("📝 Упражнения по грамматике из учебника")
-            
-            with st.expander("💡 Открыть Подсказку и Правило по уроку (Grammar)"):
-                st.markdown(f"### {unit_data['rule_title']}")
-                st.markdown(unit_data['rule_text'])
-            
-            if "grammar_tasks" in unit_data:
-                if f"gram_idx_{selected_unit}" not in st.session_state:
-                    st.session_state[f"gram_idx_{selected_unit}"] = random.randint(0, len(unit_data["grammar_tasks"]) - 1)
-                
-                g_idx = st.session_state[f"gram_idx_{selected_unit}"]
-                task_item = unit_data["grammar_tasks"][g_idx]
-                
-                st.markdown(f"**Задание из книги:** `{task_item['task']}`")
-                
-                user_ans = st.text_input("Ваш ответ (на английском):", key=f"ans_gram_{selected_unit}_{g_idx}")
-                
-                if st.button("Проверить упражнение"):
-                    if user_ans.strip().lower() == task_item['answer'].lower():
-                        st.success("🎉 Верно! Вы отлично усвоили правило.")
-                        st.session_state.users[student_name]["score"] += 15
-                        st.session_state.users[student_name]["grammar_solved"] += 1
-                        st.session_state.users[student_name]["homework"] = "Выполнено (100%)"
-                        st.session_state[f"gram_idx_{selected_unit}"] = random.randint(0, len(unit_data["grammar_tasks"]) - 1)
-                    else:
-                        st.error(f"❌ Неверно. Правильный ответ: **{task_item['answer']}**")
-            else:
-                st.info("Для этого юнита упражнения загружаются...")
-
-# ---------------------------------------------------------
-# 3. РЕЙТИНГ И ПРИЗЫ
-# ---------------------------------------------------------
-elif role == "🏆 Рейтинг и Призы":
-    st.title("🏆 Доска почета и призы по итогам курса")
-    sorted_users = sorted(st.session_state.users.items(), key=lambda x: x[1]["score"], reverse=True)
-    medals = ["🥇", "🥈", "🥉"]
-    
-    for rank, (name, info) in enumerate(sorted_users):
-        medal = medals[rank] if rank < 3 else "🏅"
-        st.markdown(f"### {medal} {rank+1} место: {name} — **{info['score']} XP** (Карточки: {info['cards_learned']}, Грамматика: {info['grammar_solved']})")
-        if rank == 0:
-            st.balloons()
-            st.success("🎁 Главный приз от Алимжановой Лайло Хамадуллаевны — Книга комиксов на английском языке!")
+# Умный генератор бесконечных заданий
+def generate_question(unit):
+    if unit == "Starter Unit":
+        sub = random.choice(["I", "He", "She", "They", "We"])
+        trait = random.choice(["brown hair", "green eyes", "curly hair", "blue eyes"])
+        ans = "'ve got" if sub in ["I", "They", "We"] else "'s got"
+        return f"Вставьте правильную форму ({sub} [...] {trait}):", ans
+    elif unit == "Unit 1":
+        items_sg = ["computer", "board", "table", "peg"]
+        items_pl = ["computers", "boards", "tables", "pegs"]
+        dist = random.choice(["близко", "далеко"])
+        is_pl = random.choice([True, False])
+        if is_pl:
+            item = random.choice(items_pl)
+            ans = "these" if dist == "близко" else "those"
+            return f"Вставьте (This/That/These/Those): [...] are new {item}. ({dist}, мн.ч.)", ans
+        else:
+            item = random.choice(items_sg)
+            ans = "this" if dist == "близко" else "that"
+            return f"Вставьте (This/That/These/Those): [...] is a new {item}. ({dist}, ед.ч.)", ans
+    elif unit == "Unit 2":
+        feel = random.choice(["hot", "cold", "hungry", "thirsty", "happy", "sad"])
+        q_type = random.choice(["affirmative", "negative_ans", "positive_ans"])
+        if q_type == "affirmative":
+            return f"Напишите сокращение для 'Они {feel}': [...] {feel}.", "they're"
+        elif q_type == "negative_ans":
+            return f"Ответьте кратко (Нет): Are they {feel}? -> No, they [...].", "aren't"
+        else:
+            return f"Ответьте кратко (Да): Are they {feel}? -> Yes, they [...].", "are"
+    elif unit == "Unit 3":
+        act = random.choice(["ride a bike", "skate", "skateboard", "play tennis", "play football"])
+        q_type = random.choice(["can", "cant", "question"])
+        if q_type == "can":
+            return f"Вставьте (can/can't): He [...] {act}. (Он умеет)", "can"
+        elif q_type == "cant":
+            return f"Вставьте (can/can't): She [...] {act}. (Она не умеет)", "can't"
+        else:
+            return f"Ответьте кратко (Да): Can he {act}? -> Yes, he [...].", "
