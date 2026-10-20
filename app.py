@@ -6,7 +6,7 @@ import os
 
 st.set_page_config(page_title="Family & Friends 2 Trainer | Методика Алимжановой Л.Х.", page_icon="🎒", layout="wide")
 
-# --- СИСТЕМА СОХРАНЕНИЯ ДАННЫХ ---
+# --- НАДЕЖНАЯ СИСТЕМА СОХРАНЕНИЯ ДАННЫХ ---
 DATA_FILE = "users_data.json"
 
 def load_users():
@@ -19,7 +19,6 @@ def save_users(users_dict):
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(users_dict, f, ensure_ascii=False, indent=4)
 
-# Инициализация пустой базы данных из файла
 if "users" not in st.session_state:
     st.session_state.users = load_users()
 
@@ -30,14 +29,21 @@ def init_progress(user_name):
 for u in st.session_state.users:
     init_progress(u)
 
-# СТРОГАЯ БАЗА УРОКОВ ИЗ КНИГИ (Все 15 юнитов + Starter)
+# --- ПОЛНАЯ БАЗА СЛОВ И ГРАММАТИКИ (Все 197 слов) ---
 if "dictionary" not in st.session_state:
     st.session_state.dictionary = {
         "Starter Unit": {
             "level_id": 1,
             "words": [
-                {"en": "mum", "ru": "мама"}, {"en": "dad", "ru": "папа"}, {"en": "brother", "ru": "брат"},
-                {"en": "sister", "ru": "сестра"}, {"en": "grandma", "ru": "бабушка"}, {"en": "grandpa", "ru": "дедушка"}
+                {"en": "welcome", "ru": "добро пожаловать"}, {"en": "back", "ru": "назад / обратно"}, {"en": "hello", "ru": "привет"},
+                {"en": "name", "ru": "имя"}, {"en": "friend", "ru": "друг"}, {"en": "boy", "ru": "мальчик"}, {"en": "girl", "ru": "девочка"},
+                {"en": "old", "ru": "старый"}, {"en": "fine", "ru": "в порядке"}, {"en": "thank you", "ru": "спасибо"},
+                {"en": "family", "ru": "семья"}, {"en": "mum", "ru": "мама"}, {"en": "dad", "ru": "папа"}, {"en": "brother", "ru": "брат"},
+                {"en": "sister", "ru": "сестра"}, {"en": "grandma", "ru": "бабушка"}, {"en": "grandpa", "ru": "дедушка"}, {"en": "cousin", "ru": "двоюродный брат/сестра"},
+                {"en": "hair", "ru": "волосы"}, {"en": "brown", "ru": "коричневый"}, {"en": "green", "ru": "зеленый"}, {"en": "eyes", "ru": "глаза"},
+                {"en": "numbers", "ru": "цифры"}, {"en": "colours", "ru": "цвета"}, {"en": "toys", "ru": "игрушки"}, {"en": "ball", "ru": "мяч"},
+                {"en": "car", "ru": "машина"}, {"en": "train", "ru": "поезд"}, {"en": "doll", "ru": "кукла"}, {"en": "teddy", "ru": "мишка"},
+                {"en": "puzzle", "ru": "пазл"}, {"en": "bike", "ru": "велосипед"}, {"en": "his", "ru": "его"}, {"en": "her", "ru": "её"}
             ],
             "rule_title": "Грамматика: I've got / He's got",
             "rule_text": "Используйте **'ve got** для I/we/they и **'s got** для he/she/it.",
@@ -50,8 +56,12 @@ if "dictionary" not in st.session_state:
         "Unit 1": {
             "level_id": 2,
             "words": [
-                {"en": "classroom", "ru": "класс"}, {"en": "table", "ru": "стол"}, {"en": "computer", "ru": "компьютер"},
-                {"en": "peg", "ru": "вешалка"}, {"en": "pencil case", "ru": "пенал"}, {"en": "board", "ru": "доска"}
+                {"en": "classroom", "ru": "класс"}, {"en": "school", "ru": "школа"}, {"en": "computer", "ru": "компьютер"},
+                {"en": "board", "ru": "доска"}, {"en": "table", "ru": "стол"}, {"en": "peg", "ru": "вешалка"},
+                {"en": "poster", "ru": "плакат"}, {"en": "picture", "ru": "картина"}, {"en": "drawer", "ru": "выдвижной ящик"},
+                {"en": "cupboard", "ru": "шкаф"}, {"en": "this", "ru": "этот"}, {"en": "these", "ru": "эти"},
+                {"en": "those", "ru": "те"}, {"en": "there is", "ru": "есть (ед.ч.)"}, {"en": "there are", "ru": "есть (мн.ч.)"},
+                {"en": "alphabet", "ru": "алфавит"}
             ],
             "rule_title": "Грамматика: This / That / These / Those",
             "rule_text": "This (это - ед.ч.), That (то - ед.ч.), These (эти - мн.ч.), Those (те - мн.ч.).",
@@ -65,8 +75,11 @@ if "dictionary" not in st.session_state:
         "Unit 2": {
             "level_id": 3,
             "words": [
-                {"en": "hot", "ru": "жарко"}, {"en": "cold", "ru": "холодно"}, {"en": "hungry", "ru": "голодный"},
-                {"en": "thirsty", "ru": "хочу пить"}, {"en": "happy", "ru": "счастливый"}, {"en": "sad", "ru": "грустный"}
+                {"en": "happy", "ru": "счастливый"}, {"en": "sad", "ru": "грустный"}, {"en": "angry", "ru": "злой"},
+                {"en": "tired", "ru": "уставший"}, {"en": "hungry", "ru": "голодный"}, {"en": "thirsty", "ru": "хочу пить"},
+                {"en": "scared", "ru": "испуганный"}, {"en": "hot", "ru": "жарко"}, {"en": "cold", "ru": "холодно"},
+                {"en": "feelings", "ru": "чувства"}, {"en": "he", "ru": "он"}, {"en": "she", "ru": "она"}, {"en": "they", "ru": "они"},
+                {"en": "isn't", "ru": "не (ед.ч.)"}, {"en": "aren't", "ru": "не (мн.ч.)"}
             ],
             "rule_title": "Грамматика: We're / They're & Are they...?",
             "rule_text": "We're (Мы), They're (Они). Вопросы: Are they...?",
@@ -80,36 +93,46 @@ if "dictionary" not in st.session_state:
         "Unit 3": {
             "level_id": 4,
             "words": [
-                {"en": "ride a bike", "ru": "кататься на велосипеде"}, {"en": "skate", "ru": "кататься на коньках"},
-                {"en": "skateboard", "ru": "скейтборд"}, {"en": "play tennis", "ru": "играть в теннис"}
+                {"en": "skateboard", "ru": "скейтборд"}, {"en": "scooter", "ru": "самокат"}, {"en": "kite", "ru": "воздушный змей"},
+                {"en": "balloon", "ru": "шарик"}, {"en": "ride", "ru": "кататься"}, {"en": "fly", "ru": "летать / запускать"},
+                {"en": "play", "ru": "играть"}, {"en": "run", "ru": "бегать"}, {"en": "jump", "ru": "прыгать"},
+                {"en": "behind", "ru": "позади"}, {"en": "in front of", "ru": "спереди"}, {"en": "next to", "ru": "рядом с"},
+                {"en": "between", "ru": "между"}, {"en": "where", "ru": "где"}, {"en": "under", "ru": "под"},
+                {"en": "can", "ru": "мочь / уметь"}, {"en": "can't", "ru": "не уметь"}
             ],
-            "rule_title": "Грамматика: Can / Can't",
-            "rule_text": "I can (я умею), I can't (я не умею).",
+            "rule_title": "Грамматика: Can / Can't и Предлоги",
+            "rule_text": "I can (я умею), I can't (я не умею). Предлоги: in front of, behind, next to.",
             "grammar_tasks": [
                 {"task": "He [...] ride a bike. (Умеет)", "answer": "can"},
                 {"task": "He [...] ride a horse. (Не умеет)", "answer": "can't"},
-                {"task": "Ответьте: Can she play tennis? Yes, she [...].", "answer": "can"}
+                {"task": "Ответьте: Can she play tennis? Yes, she [...].", "answer": "can"},
+                {"task": "Где мяч? It is [...] the table. (под)", "answer": "under"}
             ]
         },
         "Unit 4": {
             "level_id": 5,
             "words": [
-                {"en": "salad", "ru": "салат"}, {"en": "fries", "ru": "картофель фри"}, {"en": "pizza", "ru": "пицца"},
-                {"en": "milkshake", "ru": "молочный коктейль"}, {"en": "cheese sandwich", "ru": "бутерброд с сыром"}
+                {"en": "food", "ru": "еда"}, {"en": "apple", "ru": "яблоко"}, {"en": "banana", "ru": "банан"},
+                {"en": "orange", "ru": "апельсин"}, {"en": "grapes", "ru": "виноград"}, {"en": "bread", "ru": "хлеб"},
+                {"en": "cheese", "ru": "сыр"}, {"en": "eggs", "ru": "яйца"}, {"en": "milk", "ru": "молоко"},
+                {"en": "water", "ru": "вода"}, {"en": "juice", "ru": "сок"}, {"en": "milkshake", "ru": "молочный коктейль"},
+                {"en": "lunch", "ru": "обед"}, {"en": "have got", "ru": "иметь (у меня есть)"}, {"en": "haven't got", "ru": "не иметь (у меня нет)"}
             ],
             "rule_title": "Грамматика: Have you got...? / Has he got...?",
             "rule_text": "Вопросы о наличии еды: Have you got a milkshake? Yes, I have.",
             "grammar_tasks": [
                 {"task": "Ответьте: Have you got a milkshake? Yes, I [...].", "answer": "have"},
                 {"task": "Ответьте: Have you got fries? No, I [...].", "answer": "haven't"},
-                {"task": "Ответьте: Has she got a pizza? No, she [...].", "answer": "hasn't"}
+                {"task": "Ответьте: Has she got an apple? No, she [...].", "answer": "hasn't"}
             ]
         },
         "Unit 5": {
             "level_id": 6,
             "words": [
-                {"en": "art", "ru": "рисование"}, {"en": "maths", "ru": "математика"}, {"en": "English", "ru": "английский язык"},
-                {"en": "science", "ru": "наука"}, {"en": "PE", "ru": "физкультура"}, {"en": "music", "ru": "музыка"}
+                {"en": "subject", "ru": "школьный предмет"}, {"en": "art", "ru": "рисование"}, {"en": "English", "ru": "английский язык"},
+                {"en": "maths", "ru": "математика"}, {"en": "music", "ru": "музыка"}, {"en": "science", "ru": "естествознание"},
+                {"en": "PE", "ru": "физкультура"}, {"en": "library", "ru": "библиотека"}, {"en": "playground", "ru": "игровая площадка"},
+                {"en": "our", "ru": "наш"}, {"en": "their", "ru": "их"}
             ],
             "rule_title": "Грамматика: What/When have we got...? our/their",
             "rule_text": "What have we got on Monday? We've got English.",
@@ -122,11 +145,12 @@ if "dictionary" not in st.session_state:
         "Unit 6": {
             "level_id": 7,
             "words": [
-                {"en": "help", "ru": "помогать"}, {"en": "homework", "ru": "ДЗ"},
-                {"en": "visit", "ru": "навещать"}, {"en": "swimming", "ru": "плавание"}
+                {"en": "after school", "ru": "после школы"}, {"en": "read", "ru": "читать"}, {"en": "book", "ru": "книга"},
+                {"en": "draw", "ru": "рисовать"}, {"en": "sing", "ru": "петь"}, {"en": "dance", "ru": "танцевать"},
+                {"en": "swim", "ru": "плавать"}, {"en": "visit", "ru": "навещать"}, {"en": "don't", "ru": "не (отрицание)"}
             ],
-            "rule_title": "Грамматика: I visit... / I don't have...",
-            "rule_text": "Повседневные действия после школы. I visit my grandma every Tuesday.",
+            "rule_title": "Грамматика: I visit... / I don't...",
+            "rule_text": "Повседневные действия после школы. I visit my grandma.",
             "grammar_tasks": [
                 {"task": "I [...] my grandma every Tuesday. (навещаю)", "answer": "visit"},
                 {"task": "I [...] watch TV. (не смотрю)", "answer": "don't"},
@@ -136,20 +160,26 @@ if "dictionary" not in st.session_state:
         "Unit 7": {
             "level_id": 8,
             "words": [
-                {"en": "chocolate", "ru": "шоколад"}, {"en": "sweets", "ru": "сладости"}, {"en": "balloon", "ru": "воздушный шар"}
+                {"en": "present", "ru": "подарок"}, {"en": "buy", "ru": "покупать"}, {"en": "like", "ru": "нравиться / любить"},
+                {"en": "doesn't like", "ru": "не нравится"}, {"en": "tennis", "ru": "теннис"}, {"en": "football", "ru": "футбол"},
+                {"en": "gloves", "ru": "перчатки"}, {"en": "glue", "ru": "клей"}, {"en": "slippers", "ru": "тапочки"},
+                {"en": "slide", "ru": "горка"}, {"en": "special day", "ru": "особенный день"}
             ],
             "rule_title": "Грамматика: I like / He likes / doesn't like",
             "rule_text": "I like balloons. He likes chocolate. He doesn't like balloons.",
             "grammar_tasks": [
-                {"task": "I [...] sweets. (мне нравятся)", "answer": "like"},
-                {"task": "He [...] chocolate. (ему нравится)", "answer": "likes"},
-                {"task": "He [...] like balloons. (ему не нравятся)", "answer": "doesn't"}
+                {"task": "I [...] presents. (мне нравятся)", "answer": "like"},
+                {"task": "He [...] tennis. (ему нравится)", "answer": "likes"},
+                {"task": "He [...] like football. (ему не нравится)", "answer": "doesn't"}
             ]
         },
         "Unit 8": {
             "level_id": 9,
             "words": [
-                {"en": "get up", "ru": "вставать"}, {"en": "have breakfast", "ru": "завтракать"}, {"en": "go to school", "ru": "идти в школу"}
+                {"en": "time", "ru": "время"}, {"en": "o'clock", "ru": "час(ов)"}, {"en": "morning", "ru": "утро"},
+                {"en": "afternoon", "ru": "день"}, {"en": "evening", "ru": "вечер"}, {"en": "night", "ru": "ночь"},
+                {"en": "breakfast", "ru": "завтрак"}, {"en": "get up", "ru": "вставать"}, {"en": "go to bed", "ru": "ложиться спать"},
+                {"en": "homework", "ru": "домашнее задание"}
             ],
             "rule_title": "Грамматика: Время и распорядок дня",
             "rule_text": "What's the time? It's seven o'clock.",
@@ -162,290 +192,9 @@ if "dictionary" not in st.session_state:
         "Unit 9": {
             "level_id": 10,
             "words": [
-                {"en": "hospital", "ru": "больница"}, {"en": "school", "ru": "школа"}, {"en": "airport", "ru": "аэропорт"}
+                {"en": "places", "ru": "места"}, {"en": "hospital", "ru": "больница"}, {"en": "school", "ru": "школа"},
+                {"en": "airport", "ru": "аэропорт"}, {"en": "police station", "ru": "полицейский участок"}, {"en": "fire station", "ru": "пожарная часть"},
+                {"en": "shop", "ru": "магазин"}
             ],
             "rule_title": "Грамматика: Where does he work?",
-            "rule_text": "Where does he work? He works in a police station.",
-            "grammar_tasks": [
-                {"task": "Where [...] he work?", "answer": "does"},
-                {"task": "He [...] in a police station. (работает)", "answer": "works"},
-                {"task": "Does she work in a shop? Yes, she [...].", "answer": "does"}
-            ]
-        },
-        "Unit 10": {
-            "level_id": 11,
-            "words": [
-                {"en": "sunny", "ru": "солнечно"}, {"en": "windy", "ru": "ветрено"}, {"en": "raining", "ru": "идет дождь"}
-            ],
-            "rule_title": "Грамматика: What's the weather like?",
-            "rule_text": "What's the weather like? It's sunny. Put on your sun hat.",
-            "grammar_tasks": [
-                {"task": "What's the weather [...]?", "answer": "like"},
-                {"task": "[...] on your sun hat. (надень)", "answer": "put"},
-                {"task": "[...] put on your coat. (не надевай)", "answer": "don't"}
-            ]
-        },
-        "Unit 11": {
-            "level_id": 12,
-            "words": [
-                {"en": "skirt", "ru": "юбка"}, {"en": "scarf", "ru": "шарф"}, {"en": "gloves", "ru": "перчатки"}
-            ],
-            "rule_title": "Грамматика: What are you wearing?",
-            "rule_text": "What are you wearing? I'm wearing a blue skirt.",
-            "grammar_tasks": [
-                {"task": "What [...] you wearing?", "answer": "are"},
-                {"task": "I'm [...] a blue skirt. (на мне надето)", "answer": "wearing"},
-                {"task": "What's he wearing? He's wearing red [...]. (перчатки)", "answer": "gloves"}
-            ]
-        },
-        "Unit 12": {
-            "level_id": 13,
-            "words": [
-                {"en": "wedding", "ru": "свадьба"}, {"en": "guests", "ru": "гости"}, {"en": "cake", "ru": "торт"}
-            ],
-            "rule_title": "Грамматика: What are you doing?",
-            "rule_text": "What are you doing? I'm dancing with friends.",
-            "grammar_tasks": [
-                {"task": "What [...] you doing?", "answer": "are"},
-                {"task": "What's she doing? She's [...] the cake. (ест)", "answer": "eating"},
-                {"task": "What are they doing? They're [...]. (разговаривают)", "answer": "talking"}
-            ]
-        },
-        "Unit 13": {
-            "level_id": 14,
-            "words": [
-                {"en": "cow", "ru": "корова"}, {"en": "goat", "ru": "коза"}, {"en": "horse", "ru": "лошадь"}
-            ],
-            "rule_title": "Грамматика: Сравнительная степень (-er than)",
-            "rule_text": "This cow is bigger than that cow.",
-            "grammar_tasks": [
-                {"task": "The sheep is [...] than the goat. (больше)", "answer": "bigger"},
-                {"task": "The boy is shorter [...] the girl. (чем)", "answer": "than"},
-                {"task": "The horse is [...] than the goat. (больше)", "answer": "bigger"}
-            ]
-        },
-        "Unit 14": {
-            "level_id": 15,
-            "words": [
-                {"en": "was", "ru": "был(а)"}, {"en": "were", "ru": "были"}, {"en": "wasn't", "ru": "не был(а)"}
-            ],
-            "rule_title": "Грамматика: Past Simple (I was / You were)",
-            "rule_text": "I was naughty. You were happy.",
-            "grammar_tasks": [
-                {"task": "I [...] happy. (был)", "answer": "was"},
-                {"task": "You [...] happy. (были)", "answer": "were"},
-                {"task": "They [...] cold. (не были)", "answer": "weren't"}
-            ]
-        },
-        "Unit 15": {
-            "level_id": 16,
-            "words": [
-                {"en": "children", "ru": "дети"}, {"en": "men", "ru": "мужчины"}, {"en": "women", "ru": "женщины"}
-            ],
-            "rule_title": "Грамматика: There were some / weren't any",
-            "rule_text": "There were some children. There weren't any men.",
-            "grammar_tasks": [
-                {"task": "[...] were some children. (Там были...)", "answer": "there"},
-                {"task": "There were [...] children. (несколько)", "answer": "some"},
-                {"task": "There weren't [...] men. (никаких)", "answer": "any"}
-            ]
-        }
-    }
-
-# Функция для кнопки озвучки
-def text_to_speech_button(text):
-    html = f"""
-    <button onclick="let u = new SpeechSynthesisUtterance('{text}'); u.lang = 'en-US'; window.speechSynthesis.speak(u);" 
-    style="background-color:#4CAF50; color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer; font-size:16px;">
-        🔊 Послушать: {text}
-    </button>
-    """
-    return html
-
-# --- ШАПКА ---
-st.markdown("<h1 style='text-align: center; color: #2e6c80;'>✨ Интерактивная обучающая платформа Family and Friends 2</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center; color: #555;'>Инновационная методика учителя школы №20 <b>Алимжановой Лайло Хамадуллаевной</b></h3>", unsafe_allow_html=True)
-st.markdown("---")
-
-role = st.sidebar.radio("Выберите режим:", ["👦 Режим ученика", "👨‍🏫 Кабинет преподавателя", "🏆 Рейтинг"])
-
-# --- КАБИНЕТ ПРЕПОДАВАТЕЛЯ ---
-if role == "👨‍🏫 Кабинет преподавателя":
-    st.title("👨‍🏫 Кабинет преподавателя")
-    password = st.text_input("Введите пароль:", type="password")
-    
-    if password == "lx890723":
-        st.success("Доступ разрешен!")
-        
-        st.subheader("➕ Добавить нового ученика")
-        
-        # Форма для автоматической очистки поля
-        with st.form("add_student_form", clear_on_submit=True):
-            new_student = st.text_input("Имя нового ученика:")
-            submitted = st.form_submit_button("Зарегистрировать")
-            
-            if submitted:
-                if new_student.strip() == "":
-                    st.warning("Имя не может быть пустым!")
-                elif new_student in st.session_state.users:
-                    st.warning(f"Ученик '{new_student}' уже есть в журнале!")
-                else:
-                    st.session_state.users[new_student] = {"score": 0, "level": 1, "progress": {}}
-                    init_progress(new_student)
-                    save_users(st.session_state.users)
-                    st.success(f"Ученик {new_student} успешно добавлен!")
-        
-        st.markdown("---")
-        st.subheader("📊 Журнал успеваемости (Все ученики)")
-        
-        if st.session_state.users:
-            report = [{"Ученик": k, "XP (Баллы)": v["score"], "Открытый уровень": v["level"]} for k, v in st.session_state.users.items()]
-            st.dataframe(pd.DataFrame(report), use_container_width=True)
-            
-            st.markdown("---")
-            st.subheader("❌ Удалить ученика")
-            col_del1, col_del2 = st.columns([2, 1])
-            with col_del1:
-                student_to_delete = st.selectbox("Кого удалить из журнала?", list(st.session_state.users.keys()))
-            with col_del2:
-                st.write("")
-                st.write("")
-                if st.button("Удалить навсегда"):
-                    del st.session_state.users[student_to_delete]
-                    save_users(st.session_state.users)
-                    st.success("Ученик удален.")
-                    st.rerun()
-        else:
-            st.info("В журнале пока нет учеников. Зарегистрируйте их выше.")
-
-    elif password != "":
-        st.error("Неверный пароль!")
-
-# --- РЕЖИМ УЧЕНИКА ---
-elif role == "👦 Режим ученика":
-    if not st.session_state.users:
-        st.warning("В системе нет учеников. Попросите преподавателя добавить ваше имя.")
-    else:
-        student_name = st.selectbox("Ваше имя:", list(st.session_state.users.keys()))
-        selected_unit = st.selectbox("Выберите урок:", list(st.session_state.dictionary.keys()))
-        
-        user_info = st.session_state.users[student_name]
-        unit_data = st.session_state.dictionary[selected_unit]
-        
-        st.info(f"👤 **{student_name}** | ⭐️ Общий счет: **{user_info['score']} XP** | 🔓 Доступный уровень: **{user_info['level']}**")
-
-        tab1, tab2 = st.tabs(["🃏 Словарь (Свободный доступ)", "🔥 Марафон грамматики (40 вопросов)"])
-        
-        # Вкладка 1: Карточки с озвучкой
-        with tab1:
-            st.subheader("🃏 Карточки слов")
-            words_list = unit_data["words"]
-            
-            if f"c_idx_{selected_unit}" not in st.session_state:
-                st.session_state[f"c_idx_{selected_unit}"] = 0
-                
-            idx = st.session_state[f"c_idx_{selected_unit}"]
-            if idx >= len(words_list): 
-                idx = 0
-                
-            current_card = words_list[idx]
-            
-            if f"is_flipped_{selected_unit}_{idx}" not in st.session_state:
-                st.session_state[f"is_flipped_{selected_unit}_{idx}"] = False
-            
-            is_flipped = st.session_state[f"is_flipped_{selected_unit}_{idx}"]
-            
-            st.markdown("""
-            <style>
-            .card-container { display: flex; justify-content: center; align-items: center; margin: 20px 0; }
-            .flashcard {
-                width: 350px; height: 180px; background: linear-gradient(135deg, #2e6c80 0%, #4682b4 100%);
-                color: white; border-radius: 15px; display: flex; flex-direction: column; justify-content: center;
-                align-items: center; box-shadow: 0 8px 16px rgba(0,0,0,0.2); font-family: sans-serif; text-align: center; padding: 20px;
-            }
-            .card-title { font-size: 16px; opacity: 0.8; margin-bottom: 8px; color: #f1c40f; font-weight: bold;}
-            .card-word { font-size: 36px; font-weight: bold; }
-            </style>
-            """, unsafe_allow_html=True)
-            
-            word_display = current_card['ru'] if is_flipped else current_card['en']
-            title_display = "RUS (Перевод):" if is_flipped else "ENG (Слово):"
-            
-            st.markdown(f'<div class="card-container"><div class="flashcard"><div class="card-title">{title_display}</div><div class="card-word">{word_display}</div></div></div>', unsafe_allow_html=True)
-            
-            if not is_flipped:
-                st.components.v1.html(text_to_speech_button(current_card['en']), height=60)
-            else:
-                st.write("")
-            
-            col1, col2 = st.columns(2)
-            with col1:
-                if st.button("🔄 Перевернуть карточку"):
-                    st.session_state[f"is_flipped_{selected_unit}_{idx}"] = not is_flipped
-                    st.rerun()
-            with col2:
-                if st.button("Следующее слово ➡️"):
-                    st.session_state[f"is_flipped_{selected_unit}_{idx}"] = False
-                    st.session_state[f"c_idx_{selected_unit}"] = (idx + 1) % len(words_list)
-                    st.rerun()
-
-        # Вкладка 2: Марафон 40 вопросов
-        with tab2:
-            st.subheader("🔥 Марафон: Докажи, что знаешь правило!")
-            
-            if user_info["level"] < unit_data["level_id"]:
-                st.error("🔒 **УРОК ЗАКРЫТ!** Сначала пройди марафон в предыдущем юните.")
-            else:
-                if selected_unit not in user_info["progress"]:
-                    user_info["progress"][selected_unit] = 0
-                    
-                current_prog = user_info["progress"][selected_unit]
-                
-                st.progress(min(current_prog / 40.0, 1.0))
-                st.write(f"**Прогресс урока: {current_prog} / 40** (Осторожно: ошибка отнимает 1 балл!)")
-                
-                if current_prog >= 40:
-                    st.success("🎉 ПОЗДРАВЛЯЕМ! ТЫ ИДЕАЛЬНО ОСВОИЛ ЭТОТ УРОК!")
-                    if user_info["level"] == unit_data["level_id"]:
-                        st.session_state.users[student_name]["level"] += 1
-                        save_users(st.session_state.users)
-                        st.balloons()
-                        st.info("🔓 Открыт следующий уровень!")
-                else:
-                    with st.expander("💡 Открыть правило из книги"):
-                        st.write(unit_data["rule_text"])
-                    
-                    if f"g_idx_{selected_unit}" not in st.session_state:
-                        st.session_state[f"g_idx_{selected_unit}"] = random.randint(0, len(unit_data["grammar_tasks"])-1)
-                    
-                    g_idx = st.session_state[f"g_idx_{selected_unit}"]
-                    task = unit_data["grammar_tasks"][g_idx]
-                    
-                    st.markdown(f"**Задание:** `{task['task']}`")
-                    ans = st.text_input("Ваш ответ:", key=f"ans_{selected_unit}_{g_idx}")
-                    
-                    if st.button("Проверить"):
-                        if ans.strip().lower() == task['answer'].lower():
-                            st.success("✅ Верно! +1 балл к прогрессу.")
-                            st.session_state.users[student_name]["score"] += 5
-                            st.session_state.users[student_name]["progress"][selected_unit] += 1
-                            save_users(st.session_state.users)
-                        else:
-                            st.error(f"❌ Ошибка! Правильно: **{task['answer']}**. Штраф -1 балл!")
-                            st.session_state.users[student_name]["progress"][selected_unit] = max(0, current_prog - 1)
-                            save_users(st.session_state.users)
-                        
-                        st.session_state[f"g_idx_{selected_unit}"] = random.randint(0, len(unit_data["grammar_tasks"])-1)
-                        st.rerun()
-
-# --- РЕЙТИНГ ---
-elif role == "🏆 Рейтинг":
-    st.title("🏆 Доска почета")
-    if not st.session_state.users:
-        st.info("В системе пока нет учеников.")
-    else:
-        sorted_users = sorted(st.session_state.users.items(), key=lambda x: x[1]["score"], reverse=True)
-        medals = ["🥇", "🥈", "🥉"]
-        for rank, (name, info) in enumerate(sorted_users):
-            medal = medals[rank] if rank < 3 else "🏅"
-            st.markdown(f"### {medal} {rank+1} место: {name} — **{info['score']} XP** (Уровень: {info['level']})")
+            "
