@@ -6,13 +6,16 @@ import os
 
 st.set_page_config(page_title="Family & Friends 2 Trainer | Методика Алимжановой Л.Х.", page_icon="🎒", layout="wide")
 
-# --- НАДЕЖНАЯ СИСТЕМА СОХРАНЕНИЯ ДАННЫХ ---
+# --- СИСТЕМА СОХРАНЕНИЯ ДАННЫХ ---
 DATA_FILE = "users_data.json"
 
 def load_users():
     if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
+        try:
+            with open(DATA_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except:
+            return {}
     return {}
 
 def save_users(users_dict):
@@ -197,4 +200,65 @@ if "dictionary" not in st.session_state:
                 {"en": "shop", "ru": "магазин"}
             ],
             "rule_title": "Грамматика: Where does he work?",
-            "
+            "rule_text": "Where does he work? He works in a police station.",
+            "grammar_tasks": [
+                {"task": "Where [...] he work?", "answer": "does"},
+                {"task": "He [...] in a police station. (работает)", "answer": "works"},
+                {"task": "Does she work in a shop? Yes, she [...].", "answer": "does"}
+            ]
+        },
+        "Unit 10": {
+            "level_id": 11,
+            "words": [
+                {"en": "weather", "ru": "погода"}, {"en": "sunny", "ru": "солнечно"}, {"en": "rainy", "ru": "дождливо"},
+                {"en": "windy", "ru": "ветрено"}, {"en": "cloudy", "ru": "облачно"}, {"en": "snowy", "ru": "снежно"},
+                {"en": "wet", "ru": "мокрый"}, {"en": "dry", "ru": "сухой"}
+            ],
+            "rule_title": "Грамматика: What's the weather like?",
+            "rule_text": "What's the weather like? It's sunny. Put on your coat.",
+            "grammar_tasks": [
+                {"task": "What's the weather [...]?", "answer": "like"},
+                {"task": "[...] on your hat. (надень)", "answer": "put"},
+                {"task": "[...] put on your coat. (не надевай)", "answer": "don't"}
+            ]
+        },
+        "Unit 11": {
+            "level_id": 12,
+            "words": [
+                {"en": "clothes", "ru": "одежда"}, {"en": "wear", "ru": "носить"}, {"en": "shirt", "ru": "рубашка"},
+                {"en": "T-shirt", "ru": "футболка"}, {"en": "trousers", "ru": "брюки"}, {"en": "dress", "ru": "платье"},
+                {"en": "skirt", "ru": "юбка"}, {"en": "shoes", "ru": "туфли/обувь"}, {"en": "socks", "ru": "носки"},
+                {"en": "jacket", "ru": "куртка"}, {"en": "hat", "ru": "шапка/шляпа"}, {"en": "wearing", "ru": "одетый (во что-то)"}
+            ],
+            "rule_title": "Грамматика: What are you wearing?",
+            "rule_text": "What are you wearing? I'm wearing a blue skirt.",
+            "grammar_tasks": [
+                {"task": "What [...] you wearing?", "answer": "are"},
+                {"task": "I'm [...] a blue skirt. (на мне надето)", "answer": "wearing"},
+                {"task": "What's he wearing? He's wearing red [...]. (носки)", "answer": "socks"}
+            ]
+        },
+        "Unit 12": {
+            "level_id": 13,
+            "words": [
+                {"en": "celebration", "ru": "празднование"}, {"en": "party", "ru": "вечеринка"}, {"en": "sleep", "ru": "спать"},
+                {"en": "cake", "ru": "торт"}, {"en": "candles", "ru": "свечи"}, {"en": "birthday", "ru": "день рождения"},
+                {"en": "June", "ru": "июнь"}, {"en": "bed", "ru": "кровать"}
+            ],
+            "rule_title": "Грамматика: What are you doing?",
+            "rule_text": "What are you doing? I'm dancing.",
+            "grammar_tasks": [
+                {"task": "What [...] you doing?", "answer": "are"},
+                {"task": "What's she doing? She's [...] the cake. (ест)", "answer": "eating"},
+                {"task": "What are they doing? They're [...]. (разговаривают)", "answer": "talking"}
+            ]
+        },
+        "Unit 13": {
+            "level_id": 14,
+            "words": [
+                {"en": "animal", "ru": "животное"}, {"en": "farm", "ru": "ферма"}, {"en": "cow", "ru": "корова"},
+                {"en": "horse", "ru": "лошадь"}, {"en": "sheep", "ru": "овца"}, {"en": "goat", "ru": "коза"},
+                {"en": "chicken", "ru": "курица"}, {"en": "duck", "ru": "утка"}, {"en": "big", "ru": "большой"},
+                {"en": "bigger", "ru": "больше"}, {"en": "small", "ru": "маленький"}, {"en": "smaller", "ru": "меньше"}
+            ],
+            "rule_title": "Грамматика: Сравнительная степень (-er than)",
