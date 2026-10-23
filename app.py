@@ -2,25 +2,42 @@ import streamlit as st
 import pandas as pd
 import random
 import json
-import os
+from github import Github
 
-st.set_page_config(page_title="Family & Friends 2 Trainer | Методика Алимжановой Л.Х.", page_icon="🎒", layout="wide")
+st.set_page_config(page_title="Family & Friends 2 Trainer", page_icon="🎒", layout="wide")
 
-# --- СИСТЕМА СОХРАНЕНИЯ ДАННЫХ ---
+# --- СИСТЕМА ВЕЧНОГО СОХРАНЕНИЯ НА GITHUB ---
 DATA_FILE = "users_data.json"
 
+def get_repo():
+    # Получаем секретные ключи из настроек Streamlit
+    token = st.secrets["GITHUB_TOKEN"]
+    repo_name = st.secrets["GITHUB_REPO"]
+    g = Github(token)
+    return g.get_repo(repo_name)
+
 def load_users():
-    if os.path.exists(DATA_FILE):
-        try:
-            with open(DATA_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except:
-            return {}
-    return {}
+    try:
+        repo = get_repo()
+        file_content = repo.get_contents(DATA_FILE)
+        decoded_content = file_content.decoded_content.decode('utf-8')
+        return json.loads(decoded_content)
+    except Exception as e:
+        return {}
 
 def save_users(users_dict):
-    with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(users_dict, f, ensure_ascii=False, indent=4)
+    try:
+        repo = get_repo()
+        new_content = json.dumps(users_dict, ensure_ascii=False, indent=4)
+        try:
+            # Пробуем обновить существующий файл
+            file_content = repo.get_contents(DATA_FILE)
+            repo.update_file(file_content.path, "Автосохранение базы", new_content, file_content.sha)
+        except:
+            # Если файла нет, создаем его
+            repo.create_file(DATA_FILE, "Создание базы", new_content)
+    except Exception as e:
+        st.error("⚠️ Ошибка сохранения базы данных. Проверьте настройки ключа (Secrets).")
 
 if "users" not in st.session_state:
     st.session_state.users = load_users()
@@ -32,7 +49,7 @@ def init_progress(user_name):
 for u in st.session_state.users:
     init_progress(u)
 
-# --- ПОЛНАЯ БАЗА СЛОВ И ГРАММАТИКИ (БЕЗ ОШИБОК) ---
+# --- ПОЛНАЯ БАЗА СЛОВ И ГРАММАТИКИ ---
 if "dictionary" not in st.session_state:
     st.session_state.dictionary = {
         "Starter Unit": {
@@ -361,41 +378,19 @@ elif role == "👦 Режим ученика":
             if idx >= len(words_list): idx = 0
             current_card = words_list[idx]
             
-            if f"is_flipped_{selected_unit}_{idx}" not in st.session_state:
-                st.session_state[f"is_flipped_{selected_unit}_{idx}"] = False
-            is_flipped = st.session_state[f"is_flipped_{selected_unit}_{idx}"]
+            is_flipped = st.checkbox("Показать перевод на русский язык", key=f"flip_{selected_unit}_{idx}")
             
-            st.markdown("""
-            <style>
-            .card-container { display: flex; justify-content: center; align-items: center; margin: 20px 0; }
-            .flashcard {
-                width: 350px; height: 180px; background: linear-gradient(135deg, #2e6c80 0%, #4682b4 100%);
-                color: white; border-radius: 15px; display: flex; flex-direction: column; justify-content: center;
-                align-items: center; box-shadow: 0 8px 16px rgba(0,0,0,0.2); font-family: sans-serif; text-align: center; padding: 20px;
-            }
-            .card-title { font-size: 16px; opacity: 0.8; margin-bottom: 8px; color: #f1c40f; font-weight: bold;}
-            .card-word { font-size: 36px; font-weight: bold; }
-            </style>
-            """, unsafe_allow_html=True)
-            
-            word_display = current_card['ru'] if is_flipped else current_card['en']
-            title_display = "RUS (Перевод):" if is_flipped else "ENG (Слово):"
-            
-            st.markdown(f'<div class="card-container"><div class="flashcard"><div class="card-title">{title_display}</div><div class="card-word">{word_display}</div></div></div>', unsafe_allow_html=True)
-            
-            if not is_flipped:
-                st.components.v1.html(text_to_speech_button(current_card['en']), height=60)
+            st.markdown("---")
+            if is_flipped:
+                st.markdown(f"<h2 style='text-align:center; color:#e74c3c;'>🇷🇺 {current_card['ru']}</h2>", unsafe_allow_html=True)
             else:
-                st.write("")
+                st.markdown(f"<h2 style='text-align:center; color:#3498db;'>🇬🇧 {current_card['en']}</h2>", unsafe_allow_html=True)
+                st.components.v1.html(text_to_speech_button(current_card['en']), height=60)
+            st.markdown("---")
             
-            col1, col2 = st.columns(2)
-            with col1:
-                if st.button("🔄 Перевернуть карточку"):
-                    st.session_state[f"is_flipped_{selected_unit}_{idx}"] = not is_flipped
-                    st.rerun()
+            col1, col2, col3 = st.columns([1, 2, 1])
             with col2:
-                if st.button("Следующее слово ➡️"):
-                    st.session_state[f"is_flipped_{selected_unit}_{idx}"] = False
+                if st.button("Следующее слово ➡️", use_container_width=True):
                     st.session_state[f"c_idx_{selected_unit}"] = (idx + 1) % len(words_list)
                     st.rerun()
 
