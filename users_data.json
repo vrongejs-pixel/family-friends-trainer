@@ -19,7 +19,9 @@
     "Зилола": {
         "score": 0,
         "level": 1,
-        "progress": {}
+        "progress": {
+            "Starter Unit": 0
+        }
     },
     "Зайнура ": {
         "score": 205,
