@@ -2,7 +2,9 @@
     "Имрон": {
         "score": 0,
         "level": 1,
-        "progress": {}
+        "progress": {
+            "Starter Unit": 0
+        }
     },
     "Эзоза": {
         "score": 0,
@@ -20,8 +22,10 @@
         "progress": {}
     },
     "Зайнура ": {
-        "score": 0,
+        "score": 5,
         "level": 1,
-        "progress": {}
+        "progress": {
+            "Starter Unit": 1
+        }
     }
 }
