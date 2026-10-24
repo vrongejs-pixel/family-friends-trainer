@@ -22,10 +22,10 @@
         "progress": {}
     },
     "Зайнура ": {
-        "score": 5,
+        "score": 10,
         "level": 1,
         "progress": {
-            "Starter Unit": 1
+            "Starter Unit": 2
         }
     }
 }
