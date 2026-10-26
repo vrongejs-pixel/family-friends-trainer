@@ -7,10 +7,10 @@
         }
     },
     "Эзоза": {
-        "score": 10,
+        "score": 30,
         "level": 1,
         "progress": {
-            "Starter Unit": 2
+            "Starter Unit": 5
         }
     },
     "Сарвар": {
@@ -21,10 +21,10 @@
         }
     },
     "Зилола": {
-        "score": 40,
+        "score": 0,
         "level": 1,
         "progress": {
-            "Starter Unit": 7
+            "Starter Unit": 0
         }
     },
     "Зайнура ": {
