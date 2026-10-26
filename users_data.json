@@ -1,16 +1,16 @@
 {
     "Имрон": {
-        "score": 15,
-        "level": 1,
-        "progress": {
-            "Starter Unit": 3
-        }
-    },
-    "Эзоза": {
         "score": 0,
         "level": 1,
         "progress": {
             "Starter Unit": 0
+        }
+    },
+    "Эзоза": {
+        "score": 5,
+        "level": 1,
+        "progress": {
+            "Starter Unit": 1
         }
     },
     "Сарвар": {
