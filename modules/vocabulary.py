@@ -71,7 +71,7 @@ def render_vocabulary_study(progress: dict):
 
     words = _load_vocabulary()
     pos_list = ["Все части речи"] + sorted(list({w["pos"] for w in words}))
-    categories = ["Все темы"] + sorted(list({w["category"] for w in words}))
+    categories = ["Все темы"] + sorted(list({w.get("category") or "Без темы" for w in words}))
     statuses = ["Все статусы", STATUS_NEW, "Знакомое слово", STATUS_REPEAT, STATUS_CONFUSED, STATUS_KNOWN]
 
     col_f1, col_f2, col_f3, col_f4 = st.columns([1.2, 1.2, 1.1, 1.1])
