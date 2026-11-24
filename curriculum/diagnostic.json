@@ -1,0 +1,160 @@
+{
+  "blocks": [
+    {
+      "id": "vocab_basic",
+      "title": "Блок 1. Базовый словарный запас",
+      "skill": "vocabulary",
+      "description": "Проверка знания базовых слов для жизни и работы.",
+      "questions": [
+        {
+          "id": "v1",
+          "type": "choice",
+          "prompt": "Как переводится слово «warehouse»?",
+          "options": ["Склад", "Больница", "Магазин одежды", "Вокзал"],
+          "answer": "Склад",
+          "explanation": "Warehouse — склад (место хранения товаров и грузов)."
+        },
+        {
+          "id": "v2",
+          "type": "input",
+          "prompt": "Напишите по-английски слово «работа» или «работать»:",
+          "accepted": ["work", "job"],
+          "explanation": "Work — работать / работа (процесс), job — должность / место работы."
+        },
+        {
+          "id": "v3",
+          "type": "input",
+          "prompt": "Напишите по-английски слово «вчера»:",
+          "accepted": ["yesterday"],
+          "explanation": "Yesterday — вчера."
+        },
+        {
+          "id": "v4",
+          "type": "choice",
+          "prompt": "Выберите правильный перевод слова «shift» в рабочем контексте:",
+          "options": ["Рабочая смена", "Зарплата", "Отпуск", "Начальник"],
+          "answer": "Рабочая смена",
+          "explanation": "Shift — рабочая смена (например, day shift — дневная смена, night shift — ночная смена)."
+        }
+      ]
+    },
+    {
+      "id": "grammar_to_be_present",
+      "title": "Блок 2. Глагол to be, Present Simple и Present Continuous",
+      "skill": "grammar",
+      "description": "Понимание базовых конструкций настоящего времени.",
+      "questions": [
+        {
+          "id": "g1",
+          "type": "choice",
+          "prompt": "Вставьте правильную форму глагола to be: «I ___ a driver.» (Я водитель)",
+          "options": ["am", "is", "are", "be"],
+          "answer": "am",
+          "explanation": "С местоимением I (я) глагол to be в настоящем времени всегда имеет форму am."
+        },
+        {
+          "id": "g2",
+          "type": "choice",
+          "prompt": "Выберите правильное предложение (Present Simple — регулярное действие): «Он работает каждый день».",
+          "options": ["He works every day.", "He work every day.", "He is work every day.", "He working every day."],
+          "answer": "He works every day.",
+          "explanation": "В Present Simple с he/she/it к глаголу добавляется окончание -s: He works."
+        },
+        {
+          "id": "g3",
+          "type": "choice",
+          "prompt": "Действие происходит прямо сейчас (Present Continuous): «Она сейчас изучает английский».",
+          "options": ["She is learning English.", "She learns English.", "She learning English.", "She does learning English."],
+          "answer": "She is learning English.",
+          "explanation": "Для действия прямо сейчас используется am/is/are + глагол с окончанием -ing."
+        }
+      ]
+    },
+    {
+      "id": "grammar_past_future_verbs",
+      "title": "Блок 3. Past Simple, Future Simple и неправильные глаголы",
+      "skill": "grammar",
+      "description": "Прошедшее и будущее время, вопросы и отрицания.",
+      "questions": [
+        {
+          "id": "g4",
+          "type": "input",
+          "prompt": "Напишите вторую форму (Past Simple) неправильного глагола «go» (идти/ехать):",
+          "accepted": ["went"],
+          "explanation": "Неправильный глагол go во 2-й форме (Past Simple) меняется на went: I went to work yesterday."
+        },
+        {
+          "id": "g5",
+          "type": "choice",
+          "prompt": "Как правильно сделать отрицание в прошлом: «Я не работал вчера»?",
+          "options": ["I didn't work yesterday.", "I didn't worked yesterday.", "I not worked yesterday.", "I don't worked yesterday."],
+          "answer": "I didn't work yesterday.",
+          "explanation": "В отрицании Past Simple вспомогательный глагол didn't забирает прошедшее время на себя, поэтому основной глагол остаётся в начальной форме (work)."
+        },
+        {
+          "id": "g6",
+          "type": "choice",
+          "prompt": "Как задать вопрос в настоящем времени: «Ты живёшь здесь?»",
+          "options": ["Do you live here?", "Are you live here?", "Does you live here?", "Live you here?"],
+          "answer": "Do you live here?",
+          "explanation": "Вопросы с обычными глаголами (live) в Present Simple строятся через вспомогательный глагол Do (для I/you/we/they)."
+        },
+        {
+          "id": "g7",
+          "type": "choice",
+          "prompt": "Будущее время (Future Simple): «Я позвоню тебе завтра».",
+          "options": ["I will call you tomorrow.", "I call you tomorrow.", "I am call you tomorrow.", "I called you tomorrow."],
+          "answer": "I will call you tomorrow.",
+          "explanation": "Для будущего времени используется вспомогательный глагол will + начальная форма глагола."
+        }
+      ]
+    },
+    {
+      "id": "writing_translation",
+      "title": "Блок 4. Самостоятельный перевод (Письмо)",
+      "skill": "writing",
+      "description": "Умение самостоятельно построить фразу без готовых вариантов.",
+      "questions": [
+        {
+          "id": "w1",
+          "type": "input",
+          "prompt": "Переведите на английский: «Я работаю на фабрике» (или «на заводе»):",
+          "accepted": ["i work in a factory", "i work at a factory", "i work in factory"],
+          "explanation": "Правильный вариант: I work in a factory / I work at a factory."
+        },
+        {
+          "id": "w2",
+          "type": "input",
+          "prompt": "Переведите на английский: «Мне нужна помощь»:",
+          "accepted": ["i need help", "i need some help"],
+          "explanation": "Правильный вариант: I need help."
+        }
+      ]
+    },
+    {
+      "id": "reading_short",
+      "title": "Блок 5. Понимание короткого текста (Чтение)",
+      "skill": "reading",
+      "description": "Проверка понимания связного текста.",
+      "passage": "My name is Timur. I moved to another city last month to find a job. Now I work at a warehouse. My shift starts at 8 AM and finishes at 5 PM. The work is not easy, but the salary is good and my colleagues are friendly.",
+      "questions": [
+        {
+          "id": "r1",
+          "type": "choice",
+          "prompt": "Где сейчас работает Тимур?",
+          "options": ["На складе", "В ресторане", "На стройке", "В офисе"],
+          "answer": "На складе",
+          "explanation": "В тексте сказано: «Now I work at a warehouse» (Сейчас я работаю на складе)."
+        },
+        {
+          "id": "r2",
+          "type": "choice",
+          "prompt": "Во сколько заканчивается его смена?",
+          "options": ["В 5 вечера (5 PM)", "В 8 утра (8 AM)", "В 6 вечера (6 PM)", "В тексте не сказано"],
+          "answer": "В 5 вечера (5 PM)",
+          "explanation": "«My shift starts at 8 AM and finishes at 5 PM» (Смена начинается в 8 утра и заканчивается в 5 вечера)."
+        }
+      ]
+    }
+  ]
+}
