@@ -162,7 +162,7 @@ def render_flashcards(progress: dict):
 
     words = _load_vocabulary()
     pos_list = ["Все части речи"] + sorted(list({w["pos"] for w in words}))
-    categories = ["Все темы"] + sorted(list({w["category"] for w in words}))
+   categories = ["Все темы"] + sorted(list({w.get("category") or "Без темы" for w in words}))
 
     c1, c2, c3, c4 = st.columns([1.1, 1.2, 1.3, 1])
     with c1:
