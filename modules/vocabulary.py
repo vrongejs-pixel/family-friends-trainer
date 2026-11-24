@@ -43,6 +43,8 @@ def _load_vocabulary() -> list[dict]:
                     seen_ids.add(w["id"])
                     if not w.get("pos"):
                         w["pos"] = "Существительные"
+                    if not w.get("category"):
+                        w["category"] = "Без темы"
                     words.append(w)
         except Exception:
             continue
@@ -70,7 +72,7 @@ def render_vocabulary_study(progress: dict):
     st.caption("Изучай слова по частям речи и жизненным темам: смотри транскрипцию, слушай произношение и отмечай изученные.")
 
     words = _load_vocabulary()
-    pos_list = ["Все части речи"] + sorted(list({w["pos"] for w in words}))
+    pos_list = ["Все части речи"] + sorted(list({w.get("pos") or "Без части речи" for w in words}))
     categories = ["Все темы"] + sorted(list({w.get("category") or "Без темы" for w in words}))
     statuses = ["Все статусы", STATUS_NEW, "Знакомое слово", STATUS_REPEAT, STATUS_CONFUSED, STATUS_KNOWN]
 
@@ -89,9 +91,11 @@ def render_vocabulary_study(progress: dict):
     filtered = []
     for w in words:
         w_state = get_word_state(progress, w["id"])
-        if selected_pos != "Все части речи" and w["pos"] != selected_pos:
+        w_pos = w.get("pos") or "Без части речи"
+        w_cat = w.get("category") or "Без темы"
+        if selected_pos != "Все части речи" and w_pos != selected_pos:
             continue
-        if selected_cat != "Все темы" and w["category"] != selected_cat:
+        if selected_cat != "Все темы" and w_cat != selected_cat:
             continue
         if selected_status != "Все статусы" and w_state["status"] != selected_status:
             continue
@@ -120,12 +124,14 @@ def render_vocabulary_study(progress: dict):
     page_items = filtered[start_idx : start_idx + page_size]
 
     for w, w_state in page_items:
+        w_pos = w.get("pos") or "Без части речи"
+        w_cat = w.get("category") or "Без темы"
         with st.container(border=True):
             top_l, top_r = st.columns([2, 1])
             with top_l:
                 st.markdown(f"### {w['word']}  `{w['ipa']}`  —  **{w['translation']}**")
                 st.caption(
-                    f"Часть речи: **{w['pos']}** | Тема: {w['category']} | Уровень: {w['level']} | Статус: **{w_state['status']}**"
+                    f"Часть речи: **{w_pos}** | Тема: {w_cat} | Уровень: {w['level']} | Статус: **{w_state['status']}**"
                 )
             with top_r:
                 _render_audio_controls(w["word"], key_prefix=f"vocab_{w['id']}")
@@ -161,8 +167,8 @@ def render_flashcards(progress: dict):
     st.caption("Посмотри на слово, вспомни значение и нажми «Перевернуть карточку», чтобы увидеть обратную сторону.")
 
     words = _load_vocabulary()
-    pos_list = ["Все части речи"] + sorted(list({w["pos"] for w in words}))
-   categories = ["Все темы"] + sorted(list({w.get("category") or "Без темы" for w in words}))
+    pos_list = ["Все части речи"] + sorted(list({w.get("pos") or "Без части речи" for w in words}))
+    categories = ["Все темы"] + sorted(list({w.get("category") or "Без темы" for w in words}))
 
     c1, c2, c3, c4 = st.columns([1.1, 1.2, 1.3, 1])
     with c1:
@@ -180,8 +186,8 @@ def render_flashcards(progress: dict):
 
     pool = [
         w for w in words
-        if (pos_filter == "Все части речи" or w["pos"] == pos_filter)
-        and (cat_filter == "Все темы" or w["category"] == cat_filter)
+        if (pos_filter == "Все части речи" or (w.get("pos") or "Без части речи") == pos_filter)
+        and (cat_filter == "Все темы" or (w.get("category") or "Без темы") == cat_filter)
     ]
     if not pool:
         st.warning("По выбранным фильтрам слов пока нет.")
@@ -214,13 +220,15 @@ def render_flashcards(progress: dict):
 
     card = next(w for w in pool if w["id"] == st.session_state.fc_card_id)
     w_state = get_word_state(progress, card["id"])
+    card_pos = card.get("pos") or "Без части речи"
+    card_cat = card.get("category") or "Без темы"
     is_en_front = side_mode.startswith("🇬🇧")
 
     st.divider()
 
     with st.container(border=True):
         st.caption(
-            f"Часть речи: **{card['pos']}** | Тема: {card['category']} | Уровень: {card['level']} | Статус: **{w_state['status']}**"
+            f"Часть речи: **{card_pos}** | Тема: {card_cat} | Уровень: {card['level']} | Статус: **{w_state['status']}**"
         )
 
         if not st.session_state.fc_flipped:
@@ -304,83 +312,7 @@ def render_vocabulary_test(progress: dict):
     )
 
     words = _load_vocabulary()
-    pos_list = ["Все части речи"] + sorted(list({w["pos"] for w in words}))
-    categories = ["Все изученные и сложные", "Все слова из базы"] + sorted(list({w["category"] for w in words}))
+    pos_list = ["Все части речи"] + sorted(list({w.get("pos") or "Без части речи" for w in words}))
+    categories = ["Все изученные и сложные", "Все слова из базы"] + sorted(list({w.get("category") or "Без темы" for w in words}))
 
-    col1, col2, col3 = st.columns([1.2, 1.4, 1])
-    with col1:
-        pos_scope = st.selectbox("Часть речи:", pos_list, key="vtest_pos")
-    with col2:
-        scope = st.selectbox("Какие слова проверять:", categories, key="vtest_scope")
-    with col3:
-        accent = st.selectbox("Озвучка:", ["US (Американский)", "UK (Британский)"], key="vtest_accent")
-
-    base_words = [w for w in words if pos_scope == "Все части речи" or w["pos"] == pos_scope]
-
-    if scope == "Все изученные и сложные":
-        pool = [w for w in base_words if get_word_state(progress, w["id"])["status"] != STATUS_NEW]
-        if not pool:
-            st.info("Вы ещё не отметили изученные слова, поэтому тест запущен по всем словам выбранной части речи.")
-            pool = base_words
-    elif scope == "Все слова из базы":
-        pool = base_words
-    else:
-        pool = [w for w in base_words if w["category"] == scope]
-
-    if not pool:
-        st.warning("По выбранным фильтрам слов пока нет.")
-        return
-
-    weak_words = [
-        w for w in pool
-        if get_word_state(progress, w["id"])["status"] in (STATUS_REPEAT, STATUS_CONFUSED)
-    ]
-    known_words = [
-        w for w in pool
-        if get_word_state(progress, w["id"])["status"] == STATUS_KNOWN
-    ]
-
-    m1, m2, m3 = st.columns(3)
-    m1.metric("Слов в тесте", len(pool))
-    m2.metric("Закреплено (Хорошо знаю)", len(known_words))
-    m3.metric("На повтор (Ошибки)", len(weak_words))
-
-    def _select_test_word(exclude_id: str | None = None) -> dict:
-        retry_queue = st.session_state.setdefault("vtest_retry_queue", [])
-        valid_queue = [wid for wid in retry_queue if wid != exclude_id and any(w["id"] == wid for w in pool)]
-        if valid_queue and random.random() < 0.65:
-            chosen_id = random.choice(valid_queue)
-            return next(w for w in pool if w["id"] == chosen_id)
-
-        candidates = [w for w in pool if w["id"] != exclude_id] or pool
-        weighted = []
-        for w in candidates:
-            st_data = get_word_state(progress, w["id"])
-            status = st_data["status"]
-            if status == STATUS_CONFUSED:
-                weight = 6
-            elif status == STATUS_REPEAT:
-                weight = 5
-            elif is_due_for_review(st_data):
-                weight = 3
-            elif status != STATUS_KNOWN:
-                weight = 2
-            else:
-                weight = 1
-            weighted.extend([w] * weight)
-        return random.choice(weighted)
-
-    test_sig = f"{pos_scope}|{scope}"
-    if (
-        "vtest_word_id" not in st.session_state
-        or st.session_state.get("vtest_last_sig") != test_sig
-        or not any(w["id"] == st.session_state.vtest_word_id for w in pool)
-    ):
-        st.session_state.vtest_last_sig = test_sig
-        st.session_state.vtest_word_id = _select_test_word()["id"]
-        st.session_state.vtest_answered = False
-        st.session_state.vtest_user_input = ""
-
-    current_w = next(w for w in pool if w["id"] == st.session_state.vtest_word_id)
-    w_state = get_word_state(progress, current_w["id"])
-    is_retry = current_w["id"]
+    col1, col
