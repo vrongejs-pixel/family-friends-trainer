@@ -3,7 +3,11 @@ from services.storage import load_progress
 from services.progress_tracker import record_activity
 from modules.dashboard import render_dashboard
 from modules.diagnostic import render_diagnostic
-from modules.vocabulary import render_vocabulary_study, render_flashcards
+from modules.vocabulary import (
+    render_vocabulary_study,
+    render_flashcards,
+    render_vocabulary_test,
+)
 
 st.set_page_config(
     page_title="MY ENGLISH — Метод Холмата",
@@ -12,7 +16,6 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Загружаем прогресс пользователя в состояние сессии
 if "progress" not in st.session_state:
     st.session_state.progress = load_progress()
 
@@ -21,7 +24,6 @@ if "current_page" not in st.session_state:
 
 progress = st.session_state.progress
 
-# Боковое меню навигации
 with st.sidebar:
     st.title("MY ENGLISH")
     st.caption("Метод изучения английского Холмата")
@@ -32,6 +34,7 @@ with st.sidebar:
         "Диагностика",
         "Словарь",
         "Карточки",
+        "Тест по словарю",
         "Грамматика (Этап 3)",
         "Глаголы (Этап 4)",
         "Жизнь и работа (Этап 5)",
@@ -57,7 +60,6 @@ with st.sidebar:
     st.caption(f"Пользователь: **{progress.get('user_name', 'Холмат')}**")
     st.caption(f"Уровень: **{progress.get('overall_level', 'Не определён').split(' ')[0]}**")
 
-# Роутинг по разделам
 page = st.session_state.current_page
 
 if page == "Главная панель":
@@ -71,6 +73,9 @@ elif page == "Словарь":
 
 elif page == "Карточки":
     render_flashcards(progress)
+
+elif page == "Тест по словарю":
+    render_vocabulary_test(progress)
 
 elif page == "Журнал ошибок":
     st.header("📓 Журнал ошибок")
