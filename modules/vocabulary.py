@@ -1,3 +1,4 @@
+import glob
 import json
 import os
 import random
@@ -26,13 +27,25 @@ def _normalize(text: str) -> str:
     return text
 
 
+@st.cache_data(ttl=60)
 def _load_vocabulary() -> list[dict]:
-    path = os.path.join("curriculum", "vocabulary.json")
-    with open(path, "r", encoding="utf-8") as f:
-        words = json.load(f).get("words", [])
-    for w in words:
-        if "pos" not in w or not w["pos"]:
-            w["pos"] = "Существительные"
+    words = []
+    seen_ids = set()
+    for path in sorted(glob.glob(os.path.join("curriculum", "*.json"))):
+        if os.path.basename(path) == "diagnostic_questions.json":
+            continue
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            items = data.get("words", []) if isinstance(data, dict) else []
+            for w in items:
+                if w.get("id") and w["id"] not in seen_ids:
+                    seen_ids.add(w["id"])
+                    if not w.get("pos"):
+                        w["pos"] = "Существительные"
+                    words.append(w)
+        except Exception:
+            continue
     return words
 
 
@@ -96,7 +109,6 @@ def render_vocabulary_study(progress: dict):
 
     st.divider()
 
-    # Пагинация, чтобы при 2000+ словах страница работала быстро
     page_size = 25
     total_pages = max(1, (len(filtered) + page_size - 1) // page_size)
     if total_pages > 1:
@@ -371,88 +383,4 @@ def render_vocabulary_test(progress: dict):
 
     current_w = next(w for w in pool if w["id"] == st.session_state.vtest_word_id)
     w_state = get_word_state(progress, current_w["id"])
-    is_retry = current_w["id"] in st.session_state.get("vtest_retry_queue", []) or w_state["status"] in (
-        STATUS_REPEAT,
-        STATUS_CONFUSED,
-    )
-
-    st.divider()
-    with st.container(border=True):
-        if is_retry:
-            st.warning("🔁 **Повторное закрепление:** ранее в этом слове была ошибка.")
-        st.caption(
-            f"Часть речи: **{current_w['pos']}** | Тема: {current_w['category']} | Уровень: {current_w['level']} | Статус: **{w_state['status']}**"
-        )
-        st.markdown("### Переведите и напишите по-английски:")
-        st.markdown(f"# 🇷🇺 {current_w['translation']}")
-
-        with st.form(key=f"vtest_form_{current_w['id']}"):
-            user_text = st.text_input(
-                "Введите английское слово:",
-                placeholder="Напишите слово на английском и нажмите «Проверить»...",
-            )
-            submitted = st.form_submit_button("Проверить ответ ✅", type="primary", use_container_width=True)
-
-        if submitted and not st.session_state.vtest_answered:
-            st.session_state.vtest_answered = True
-            st.session_state.vtest_user_input = user_text
-            record_activity(progress, st.session_state, actions=1)
-
-            is_correct = _normalize(user_text) == _normalize(current_w["word"])
-            st.session_state.vtest_last_correct = is_correct
-
-            update_word_review(progress, current_w["id"], is_correct, "written_test_ru_en")
-            retry_queue = st.session_state.setdefault("vtest_retry_queue", [])
-
-            if is_correct:
-                if current_w["id"] in retry_queue and w_state["correct_streak"] >= 2:
-                    retry_queue.remove(current_w["id"])
-            else:
-                if current_w["id"] not in retry_queue:
-                    retry_queue.append(current_w["id"])
-                progress["mistakes_log"].append({
-                    "date": datetime.now().strftime("%Y-%m-%d"),
-                    "topic": f"Тест по словарю ({current_w['pos']})",
-                    "task": f"Написать по-английски: «{current_w['translation']}»",
-                    "user_answer": user_text.strip() or "Пусто",
-                    "correct_answer": current_w["word"],
-                    "explanation": f"Правильное написание: {current_w['word']} {current_w['ipa']}. Пример: {current_w['example']}",
-                    "status": "Не исправлено",
-                })
-
-            save_progress(progress)
-
-        if st.session_state.vtest_answered:
-            st.divider()
-            if st.session_state.get("vtest_last_correct"):
-                st.success(
-                    f"✅ **Правильно!** `{current_w['word']}` {current_w['ipa']} — {current_w['translation']}"
-                )
-            else:
-                st.error(
-                    f"❌ **Ошибка!** Вы написали: `{st.session_state.vtest_user_input or 'Пусто'}`\n\n"
-                    f"✅ Правильно: **`{current_w['word']}`** `{current_w['ipa']}`"
-                )
-
-            if st.button("🔊 Послушать правильное произношение", key="vtest_listen"):
-                audio = get_audio_bytes(current_w["word"], accent=accent, slow=False)
-                if audio:
-                    st.audio(audio, format="audio/mp3", autoplay=True)
-
-            st.info(f"📖 *Пример:* **{current_w['example']}**\n\n🇷🇺 {current_w['example_ru']}")
-
-    if st.button("Следующее слово в тесте ➡️", type="primary", use_container_width=True):
-        st.session_state.vtest_word_id = _select_test_word(current_w["id"])["id"]
-        st.session_state.vtest_answered = False
-        st.session_state.vtest_user_input = ""
-        st.rerun()
-
-    if weak_words:
-        with st.expander(f"📊 Анализ проблемных слов ({len(weak_words)} шт. на закрепление)"):
-            st.write("Система автоматически будет давать эти слова чаще в случайном порядке, пока вы не напишете их без ошибок:")
-            for ww in weak_words:
-                st_w = get_word_state(progress, ww["id"])
-                st.write(
-                    f"• **{ww['translation']}** → `{ww['word']}` {ww['ipa']} "
-                    f"*(ошибок: {st_w['total_wrong']}, серия верных: {st_w['correct_streak']})*"
-                )
+    is_retry = current_w["id"]
