@@ -1,37 +1,86 @@
-Понял. Ты ждёшь уже **готовый рабочий скрипт MY ENGLISH**, а не дальнейшее обсуждение требований.
+import streamlit as st
+from services.storage import load_progress
+from services.progress_tracker import record_activity
+from modules.dashboard import render_dashboard
+from modules.diagnostic import render_diagnostic
 
-Скажу честно: я пока не создал новый скрипт. Раньше мы зафиксировали концепцию, но до программирования ещё не дошли. Теперь перейду к подготовке реализации на основе твоего старого кода: уберу школьные режимы и переделаю приложение под личное изучение английского.
+st.set_page_config(
+    page_title="MY ENGLISH — Метод Холмата",
+    page_icon="🇬🇧",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
 
-Первая версия скрипта готова
+# Загружаем прогресс пользователя в состояние сессии
+if "progress" not in st.session_state:
+    st.session_state.progress = load_progress()
 
-**MY ENGLISH — личный тренажёр**
+if "current_page" not in st.session_state:
+    st.session_state.current_page = "Главная панель"
 
-Основной файл Python • 44 КБ
+progress = st.session_state.progress
 
-Скачать основной скрипт my_english_app.py
+# Боковое меню навигации
+with st.sidebar:
+    st.title("MY ENGLISH")
+    st.caption("Метод изучения английского Холмата")
+    st.divider()
 
-**Файл зависимостей**
+    menu_items = [
+        "Главная панель",
+        "Диагностика",
+        "Словарь (Этап 2)",
+        "Карточки (Этап 2)",
+        "Грамматика (Этап 3)",
+        "Глаголы (Этап 4)",
+        "Жизнь и работа (Этап 5)",
+        "Чтение (Этап 6)",
+        "Аудирование и речь (Этап 7)",
+        "Журнал ошибок",
+    ]
 
-Скачать requirements.txt
+    selected = st.radio(
+        "Разделы обучения:",
+        options=menu_items,
+        index=menu_items.index(st.session_state.current_page)
+        if st.session_state.current_page in menu_items
+        else 0,
+    )
 
-### **Что уже реализовано**
+    if selected != st.session_state.current_page:
+        st.session_state.current_page = selected
+        record_activity(progress, st.session_state, actions=1)
+        st.rerun()
 
-- Личный словарь и карточки.
-- Проверка слов: русский → английский.
-- Основные грамматические темы с объяснениями.
-- Неправильные глаголы V1/V2/V3.
-- Фразовые глаголы.
-- Практические ситуации из жизни и работы с подробным грамматическим разбором.
-- Чтение текстов и вопросы на понимание.
-- Озвучивание английских слов и предложений.
-- Сохранение ошибок, прогресса и резервная копия данных.
+    st.divider()
+    st.caption(f"Пользователь: **{progress.get('user_name', 'Холмат')}**")
+    st.caption(f"Уровень: **{progress.get('overall_level', 'Не определён').split(' ')[0]}**")
 
-**Проверка:** синтаксис Python проверен. Но приложение ещё не запускалось в твоём Streamlit Cloud, поэтому перед использованием нужно проверить его там.
+# Роутинг по разделам
+page = st.session_state.current_page
 
-### **Важное уточнение**
+if page == "Главная панель":
+    render_dashboard(progress)
 
-Это первая рабочая основа, а не окончательная версия всей нашей системы. В ней пока небольшая начальная база слов и ситуаций. Запись твоей речи с микрофона, профессиональная оценка произношения, полноценное аудирование и расширенные курсы A1–B2 ещё предстоит добавить.
+elif page == "Диагностика":
+    render_diagnostic(progress)
 
-Для постоянного облачного сохранения нужно настроить `GITHUB_TOKEN` и `GITHUB_REPO` в Secrets Streamlit.
+elif page == "Журнал ошибок":
+    st.header("📓 Журнал ошибок")
+    mistakes = progress.get("mistakes_log", [])
+    if not mistakes:
+        st.info("Ошибок пока нет! Они будут автоматически записываться сюда при прохождении диагностики и упражнений.")
+    else:
+        for idx, m in enumerate(mistakes):
+            with st.container(border=True):
+                st.markdown(f"**{m['date']} | {m['topic']}**")
+                st.write(f"Задание: {m['task']}")
+                st.write(f"❌ Ваш ответ: `{m['user_answer']}` → ✅ Правильно: **`{m['correct_answer']}`**")
+                st.caption(f"💡 Объяснение: {m['explanation']}")
 
-**Следующий шаг:** сначала установим эту версию в Streamlit Cloud и проверим, что она запускается и сохраняет данные. Затем будем расширять учебную базу и функции, не теряя уже сделанного.
+else:
+    st.header(f"🚧 Раздел «{page}»")
+    st.info(
+        "Этот модуль запланирован на следующий этап разработки. "
+        "Сначала убедитесь, что Главная панель, Диагностика и Журнал ошибок работают стабильно."
+    )
