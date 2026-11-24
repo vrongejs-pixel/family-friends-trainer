@@ -1,0 +1,304 @@
+{
+  "words": [
+    {
+      "id": "w_001",
+      "word": "name",
+      "translation": "имя",
+      "ipa": "/neɪm/",
+      "category": "1. О себе",
+      "level": "A1",
+      "example": "My name is Kholmat.",
+      "example_ru": "Меня зовут Холмат."
+    },
+    {
+      "id": "w_002",
+      "word": "country",
+      "translation": "страна",
+      "ipa": "/ˈkʌntri/",
+      "category": "1. О себе",
+      "level": "A1",
+      "example": "I came from another country to work here.",
+      "example_ru": "Я приехал из другой страны, чтобы работать здесь."
+    },
+    {
+      "id": "w_003",
+      "word": "family",
+      "translation": "семья",
+      "ipa": "/ˈfæməli/",
+      "category": "1. О себе",
+      "level": "A1",
+      "example": "I call my family every evening.",
+      "example_ru": "Я звоню своей семье каждый вечер."
+    },
+    {
+      "id": "w_004",
+      "word": "experience",
+      "translation": "опыт",
+      "ipa": "/ɪkˈspɪəriəns/",
+      "category": "2. Работа",
+      "level": "A1",
+      "example": "I have two years of experience in construction.",
+      "example_ru": "У меня есть два года опыта в строительстве."
+    },
+    {
+      "id": "w_005",
+      "word": "shift",
+      "translation": "рабочая смена",
+      "ipa": "/ʃɪft/",
+      "category": "2. Работа",
+      "level": "A1",
+      "example": "My morning shift starts at seven o'clock.",
+      "example_ru": "Моя утренняя смена начинается в семь часов."
+    },
+    {
+      "id": "w_006",
+      "word": "salary",
+      "translation": "зарплата",
+      "ipa": "/ˈsæləri/",
+      "category": "2. Работа",
+      "level": "A1",
+      "example": "They pay the salary twice a month.",
+      "example_ru": "Они выплачивают зарплату два раза в месяц."
+    },
+    {
+      "id": "w_007",
+      "word": "supervisor",
+      "translation": "начальник смены / бригадир",
+      "ipa": "/ˈsuːpərvaɪzər/",
+      "category": "2. Работа",
+      "level": "A2",
+      "example": "Ask the supervisor if you need new gloves.",
+      "example_ru": "Спроси бригадира, если тебе нужны новые перчатки."
+    },
+    {
+      "id": "w_008",
+      "word": "interview",
+      "translation": "собеседование",
+      "ipa": "/ˈɪntərvjuː/",
+      "category": "2. Работа",
+      "level": "A1",
+      "example": "I have a job interview tomorrow morning.",
+      "example_ru": "У меня завтра утром собеседование по поводу работы."
+    },
+    {
+      "id": "w_009",
+      "word": "passport",
+      "translation": "паспорт",
+      "ipa": "/ˈpæspɔːrt/",
+      "category": "3. Миграция",
+      "level": "A1",
+      "example": "Please show your passport at the border.",
+      "example_ru": "Пожалуйста, покажите ваш паспорт на границе."
+    },
+    {
+      "id": "w_010",
+      "word": "work permit",
+      "translation": "разрешение на работу",
+      "ipa": "/wɜːrk ˈpɜːrmɪt/",
+      "category": "3. Миграция",
+      "level": "A2",
+      "example": "I need a valid work permit for this job.",
+      "example_ru": "Мне нужно действующее разрешение на работу для этой должности."
+    },
+    {
+      "id": "w_011",
+      "word": "border",
+      "translation": "граница",
+      "ipa": "/ˈbɔːrdər/",
+      "category": "3. Миграция",
+      "level": "A1",
+      "example": "We crossed the border early in the morning.",
+      "example_ru": "Мы пересекли границу рано утром."
+    },
+    {
+      "id": "w_012",
+      "word": "rent",
+      "translation": "аренда / снимать жильё",
+      "ipa": "/rent/",
+      "category": "4. Жильё",
+      "level": "A1",
+      "example": "How much is the monthly rent for this room?",
+      "example_ru": "Сколько стоит ежемесячная аренда этой комнаты?"
+    },
+    {
+      "id": "w_013",
+      "word": "utilities",
+      "translation": "коммунальные услуги",
+      "ipa": "/juːˈtɪlətiz/",
+      "category": "4. Жильё",
+      "level": "A2",
+      "example": "Are utilities included in the price?",
+      "example_ru": "Коммунальные услуги включены в стоимость?"
+    },
+    {
+      "id": "w_014",
+      "word": "landlord",
+      "translation": "арендодатель / хозяин жилья",
+      "ipa": "/ˈlændlɔːrd/",
+      "category": "4. Жильё",
+      "level": "A2",
+      "example": "The landlord promised to fix the heating today.",
+      "example_ru": "Хозяин жилья пообещал починить отопление сегодня."
+    },
+    {
+      "id": "w_015",
+      "word": "receipt",
+      "translation": "чек / квитанция",
+      "ipa": "/rɪˈsiːt/",
+      "category": "5. Покупки",
+      "level": "A1",
+      "example": "Keep the receipt if you want to return the shoes.",
+      "example_ru": "Сохраните чек, если захотите вернуть обувь."
+    },
+    {
+      "id": "w_016",
+      "word": "discount",
+      "translation": "скидка",
+      "ipa": "/ˈdɪskaʊnt/",
+      "category": "5. Покупки",
+      "level": "A1",
+      "example": "Is there a discount on winter jackets?",
+      "example_ru": "Есть ли скидка на зимние куртки?"
+    },
+    {
+      "id": "w_017",
+      "word": "ticket",
+      "translation": "билет",
+      "ipa": "/ˈtɪkɪt/",
+      "category": "6. Транспорт",
+      "level": "A1",
+      "example": "Where can I buy a bus ticket?",
+      "example_ru": "Где я могу купить билет на автобус?"
+    },
+    {
+      "id": "w_018",
+      "word": "bus stop",
+      "translation": "автобусная остановка",
+      "ipa": "/bʌs stɑːp/",
+      "category": "6. Транспорт",
+      "level": "A1",
+      "example": "The bus stop is right across the street.",
+      "example_ru": "Автобусная остановка находится прямо через дорогу."
+    },
+    {
+      "id": "w_019",
+      "word": "back",
+      "translation": "спина",
+      "ipa": "/bæk/",
+      "category": "7. Здоровье и тело",
+      "level": "A1",
+      "example": "My back hurts after lifting heavy boxes.",
+      "example_ru": "У меня болит спина после подъёма тяжёлых коробок."
+    },
+    {
+      "id": "w_020",
+      "word": "headache",
+      "translation": "головная боль",
+      "ipa": "/ˈhedeɪk/",
+      "category": "7. Здоровье и тело",
+      "level": "A1",
+      "example": "I have a strong headache and a fever.",
+      "example_ru": "У меня сильная головная боль и температура."
+    },
+    {
+      "id": "w_021",
+      "word": "pharmacy",
+      "translation": "аптека",
+      "ipa": "/ˈfɑːrməsi/",
+      "category": "7. Здоровье и тело",
+      "level": "A1",
+      "example": "I need to go to the pharmacy to buy medicine.",
+      "example_ru": "Мне нужно сходить в аптеку, чтобы купить лекарство."
+    },
+    {
+      "id": "w_022",
+      "word": "joint",
+      "translation": "сустав",
+      "ipa": "/dʒɔɪnt/",
+      "category": "7. Здоровье и тело",
+      "level": "A2",
+      "example": "He injured his knee joint at work.",
+      "example_ru": "Он повредил коленный сустав на работе."
+    },
+    {
+      "id": "w_023",
+      "word": "muscle",
+      "translation": "мышца",
+      "ipa": "/ˈmʌsl/",
+      "category": "7. Здоровье и тело",
+      "level": "A2",
+      "example": "Stretch your muscles before heavy physical work.",
+      "example_ru": "Разомните мышцы перед тяжёлой физической работой."
+    },
+    {
+      "id": "w_024",
+      "word": "apologize",
+      "translation": "извиняться",
+      "ipa": "/əˈpɑːlədʒaɪz/",
+      "category": "8. Общение",
+      "level": "A2",
+      "example": "I apologize for being late today.",
+      "example_ru": "Я извиняюсь за то, что опоздал сегодня."
+    },
+    {
+      "id": "w_025",
+      "word": "explain",
+      "translation": "объяснять",
+      "ipa": "/ɪkˈspleɪn/",
+      "category": "8. Общение",
+      "level": "A1",
+      "example": "Could you please explain this task again?",
+      "example_ru": "Не могли бы вы объяснить это задание ещё раз?"
+    },
+    {
+      "id": "w_026",
+      "word": "schedule",
+      "translation": "расписание / график",
+      "ipa": "/ˈskedʒuːl/",
+      "category": "9. Время и повседневная жизнь",
+      "level": "A2",
+      "example": "Let's check our work schedule for next week.",
+      "example_ru": "Давай проверим наш рабочий график на следующую неделю."
+    },
+    {
+      "id": "w_027",
+      "word": "weather",
+      "translation": "погода",
+      "ipa": "/ˈweðər/",
+      "category": "9. Время и повседневная жизнь",
+      "level": "A1",
+      "example": "The weather is cold and rainy today.",
+      "example_ru": "Погода сегодня холодная и дождливая."
+    },
+    {
+      "id": "w_028",
+      "word": "warehouse",
+      "translation": "склад",
+      "ipa": "/ˈwerhaʊs/",
+      "category": "10. Профессиональные направления",
+      "level": "A1",
+      "example": "We load trucks at the warehouse every morning.",
+      "example_ru": "Мы загружаем грузовики на складе каждое утро."
+    },
+    {
+      "id": "w_029",
+      "word": "forklift",
+      "translation": "вилочный погрузчик",
+      "ipa": "/ˈfɔːrklɪft/",
+      "category": "10. Профессиональные направления",
+      "level": "A2",
+      "example": "Do you have a license to drive a forklift?",
+      "example_ru": "У вас есть права на управление вилочным погрузчиком?"
+    },
+    {
+      "id": "w_030",
+      "word": "safety helmet",
+      "translation": "защитная каска",
+      "ipa": "/ˈseɪfti ˈhelmɪt/",
+      "category": "10. Профессиональные направления",
+      "level": "A1",
+      "example": "You must wear a safety helmet on the construction site.",
+      "example_ru": "Вы обязаны носить защитную каску на строительной площадке."
+    }
+  ]
+}
