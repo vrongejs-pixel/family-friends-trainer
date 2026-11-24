@@ -101,7 +101,7 @@ def render_vocabulary_study(progress: dict):
             continue
         if search_q.strip():
             q = search_q.strip().lower()
-            if q not in w["word"].lower() and q not in w["translation"].lower():
+            if q not in w.get("word", "").lower() and q not in w.get("translation", "").lower():
                 continue
         filtered.append((w, w_state))
 
@@ -129,20 +129,20 @@ def render_vocabulary_study(progress: dict):
         with st.container(border=True):
             top_l, top_r = st.columns([2, 1])
             with top_l:
-                st.markdown(f"### {w['word']}  `{w['ipa']}`  —  **{w['translation']}**")
+                st.markdown(f"### {w.get('word', '')}  `{w.get('ipa', '')}`  —  **{w.get('translation', '')}**")
                 st.caption(
-                    f"Часть речи: **{w_pos}** | Тема: {w_cat} | Уровень: {w['level']} | Статус: **{w_state['status']}**"
+                    f"Часть речи: **{w_pos}** | Тема: {w_cat} | Уровень: {w.get('level', 'A1')} | Статус: **{w_state['status']}**"
                 )
             with top_r:
-                _render_audio_controls(w["word"], key_prefix=f"vocab_{w['id']}")
+                _render_audio_controls(w.get("word", ""), key_prefix=f"vocab_{w['id']}")
 
-            st.markdown(f"📝 *Пример:* **{w['example']}**")
-            st.write(f"🇷🇺 *Перевод:* {w['example_ru']}")
+            st.markdown(f"📝 *Пример:* **{w.get('example', '')}**")
+            st.write(f"🇷🇺 *Перевод:* {w.get('example_ru', '')}")
 
             btn_col1, btn_col2 = st.columns([1, 1])
             with btn_col1:
                 if st.button("🎧 Озвучить пример", key=f"ex_{w['id']}", use_container_width=True):
-                    audio_ex = get_audio_bytes(w["example"], accent=accent, slow=False)
+                    audio_ex = get_audio_bytes(w.get("example", ""), accent=accent, slow=False)
                     if audio_ex:
                         st.audio(audio_ex, format="audio/mp3", autoplay=True)
             with btn_col2:
@@ -228,27 +228,27 @@ def render_flashcards(progress: dict):
 
     with st.container(border=True):
         st.caption(
-            f"Часть речи: **{card_pos}** | Тема: {card_cat} | Уровень: {card['level']} | Статус: **{w_state['status']}**"
+            f"Часть речи: **{card_pos}** | Тема: {card_cat} | Уровень: {card.get('level', 'A1')} | Статус: **{w_state['status']}**"
         )
 
         if not st.session_state.fc_flipped:
             st.markdown("#### Лицевая сторона")
             if is_en_front:
-                st.markdown(f"# {card['word']}")
-                st.markdown(f"### `{card['ipa']}`")
+                st.markdown(f"# {card.get('word', '')}")
+                st.markdown(f"### `{card.get('ipa', '')}`")
                 a1, a2, _ = st.columns([1, 1, 2])
                 with a1:
                     if st.button("🔊 Произнести", key="fc_front_audio", use_container_width=True):
-                        audio = get_audio_bytes(card["word"], accent=accent, slow=False)
+                        audio = get_audio_bytes(card.get("word", ""), accent=accent, slow=False)
                         if audio:
                             st.audio(audio, format="audio/mp3", autoplay=True)
                 with a2:
                     if st.button("🐢 Медленно", key="fc_front_slow", use_container_width=True):
-                        audio = get_audio_bytes(card["word"], accent=accent, slow=True)
+                        audio = get_audio_bytes(card.get("word", ""), accent=accent, slow=True)
                         if audio:
                             st.audio(audio, format="audio/mp3", autoplay=True)
             else:
-                st.markdown(f"# 🇷🇺 {card['translation']}")
+                st.markdown(f"# 🇷🇺 {card.get('translation', '')}")
 
             st.write("")
             if st.button("🔄 Перевернуть карточку", type="primary", use_container_width=True):
@@ -258,22 +258,22 @@ def render_flashcards(progress: dict):
 
         else:
             st.markdown("#### Обратная сторона")
-            st.markdown(f"# {card['word']}  `{card['ipa']}`")
-            st.markdown(f"## 🇷🇺 {card['translation']}")
+            st.markdown(f"# {card.get('word', '')}  `{card.get('ipa', '')}`")
+            st.markdown(f"## 🇷🇺 {card.get('translation', '')}")
 
             a1, a2, _ = st.columns([1, 1, 2])
             with a1:
                 if st.button("🔊 Произнести слово", key="fc_back_audio", use_container_width=True):
-                    audio = get_audio_bytes(card["word"], accent=accent, slow=False)
+                    audio = get_audio_bytes(card.get("word", ""), accent=accent, slow=False)
                     if audio:
                         st.audio(audio, format="audio/mp3", autoplay=True)
             with a2:
                 if st.button("🎧 Озвучить пример", key="fc_back_ex_audio", use_container_width=True):
-                    audio_ex = get_audio_bytes(card["example"], accent=accent, slow=False)
+                    audio_ex = get_audio_bytes(card.get("example", ""), accent=accent, slow=False)
                     if audio_ex:
                         st.audio(audio_ex, format="audio/mp3", autoplay=True)
 
-            st.info(f"📖 *Пример:* **{card['example']}**\n\n🇷🇺 *Перевод:* {card['example_ru']}")
+            st.info(f"📖 *Пример:* **{card.get('example', '')}**\n\n🇷🇺 *Перевод:* {card.get('example_ru', '')}")
 
             if st.button("🔄 Повернуть обратно (лицевая сторона)", use_container_width=True):
                 st.session_state.fc_flipped = False
@@ -312,7 +312,165 @@ def render_vocabulary_test(progress: dict):
     )
 
     words = _load_vocabulary()
-    pos_list = ["Все части речи"] + sorted(list({w.get("pos") or "Без части речи" for w in words}))
-    categories = ["Все изученные и сложные", "Все слова из базы"] + sorted(list({w.get("category") or "Без темы" for w in words}))
+    if not words:
+        st.warning("Словарь пока пуст или не удалось загрузить JSON-файлы из папки curriculum.")
+        return
 
-    col1, col
+    pos_list = ["Все части речи"] + sorted(list({w.get("pos") or "Без части речи" for w in words}))
+    categories = ["Все изученные и сложные", "Все слова из базы"] + sorted(
+        list({w.get("category") or "Без темы" for w in words})
+    )
+
+    col1, col2, col3 = st.columns([1.2, 1.4, 1])
+    with col1:
+        pos_scope = st.selectbox("Часть речи:", pos_list, key="vtest_pos")
+    with col2:
+        scope = st.selectbox("Какие слова проверять:", categories, key="vtest_scope")
+    with col3:
+        accent = st.selectbox("Озвучка:", ["US (Американский)", "UK (Британский)"], key="vtest_accent")
+
+    base_words = [
+        w for w in words
+        if pos_scope == "Все части речи" or (w.get("pos") or "Без части речи") == pos_scope
+    ]
+
+    if scope == "Все изученные и сложные":
+        pool = [w for w in base_words if get_word_state(progress, w["id"])["status"] != STATUS_NEW]
+        if not pool:
+            st.info("Вы ещё не отметили изученные слова, поэтому тест запущен по всем словам выбранной части речи.")
+            pool = base_words
+    elif scope == "Все слова из базы":
+        pool = base_words
+    else:
+        pool = [w for w in base_words if (w.get("category") or "Без темы") == scope]
+
+    if not pool:
+        st.warning("По выбранным фильтрам слов пока нет.")
+        return
+
+    weak_words = [
+        w for w in pool
+        if get_word_state(progress, w["id"])["status"] in (STATUS_REPEAT, STATUS_CONFUSED)
+    ]
+    known_words = [
+        w for w in pool
+        if get_word_state(progress, w["id"])["status"] == STATUS_KNOWN
+    ]
+
+    m1, m2, m3 = st.columns(3)
+    m1.metric("Слов в тесте", len(pool))
+    m2.metric("Закреплено (Хорошо знаю)", len(known_words))
+    m3.metric("На повтор (Ошибки)", len(weak_words))
+
+    def _select_test_word(exclude_id: str | None = None) -> dict:
+        valid_queue = [
+            wid for wid in st.session_state.get("vtest_retry_queue", [])
+            if wid != exclude_id and any(w["id"] == wid for w in pool)
+        ]
+        if valid_queue and random.random() < 0.65:
+            chosen_id = random.choice(valid_queue)
+            return next(w for w in pool if w["id"] == chosen_id)
+
+        candidates = [w for w in pool if w["id"] != exclude_id] or pool
+        weighted = []
+        for w in candidates:
+            st_data = get_word_state(progress, w["id"])
+            status = st_data["status"]
+            if status == STATUS_CONFUSED:
+                weight = 6
+            elif status == STATUS_REPEAT:
+                weight = 5
+            elif is_due_for_review(st_data):
+                weight = 3
+            elif status != STATUS_KNOWN:
+                weight = 2
+            else:
+                weight = 1
+            weighted.extend([w] * weight)
+        return random.choice(weighted)
+
+    test_sig = f"{pos_scope}|{scope}"
+    if (
+        "vtest_word_id" not in st.session_state
+        or st.session_state.get("vtest_last_sig") != test_sig
+        or not any(w["id"] == st.session_state.vtest_word_id for w in pool)
+    ):
+        st.session_state.vtest_last_sig = test_sig
+        st.session_state.vtest_word_id = _select_test_word()["id"]
+        st.session_state.vtest_answered = False
+        st.session_state.vtest_user_input = ""
+
+    current_w = next(w for w in pool if w["id"] == st.session_state.vtest_word_id)
+    w_state = get_word_state(progress, current_w["id"])
+    w_pos = current_w.get("pos") or "Без части речи"
+    w_cat = current_w.get("category") or "Без темы"
+    is_retry = current_w["id"] in st.session_state.get("vtest_retry_queue", [])
+
+    st.divider()
+
+    with st.container(border=True):
+        if is_retry:
+            st.caption("🔁 Повторное слово из очереди ошибок для закрепления")
+        st.caption(
+            f"Часть речи: **{w_pos}** | Тема: {w_cat} | Уровень: {current_w.get('level', 'A1')} | Статус: **{w_state['status']}**"
+        )
+        st.markdown(f"## 🇷🇺 {current_w.get('translation', '')}")
+
+        user_ans = st.text_input(
+            "Напишите слово по-английски:",
+            value=st.session_state.get("vtest_user_input", ""),
+            key=f"vtest_input_{current_w['id']}",
+        )
+
+        act_col1, act_col2 = st.columns([1, 1])
+        with act_col1:
+            check_clicked = st.button("✔️ Проверить ответ", type="primary", use_container_width=True)
+        with act_col2:
+            skip_clicked = st.button("⏭️ Пропустить / Следующее", use_container_width=True)
+
+        if check_clicked:
+            st.session_state.vtest_user_input = user_ans
+            is_correct = _normalize(user_ans) == _normalize(current_w.get("word", ""))
+            st.session_state.vtest_answered = True
+            st.session_state.vtest_last_correct = is_correct
+
+            update_word_review(progress, current_w["id"], is_correct, "vocab_test")
+            save_progress(progress)
+            record_activity(progress, st.session_state, actions=1)
+
+            q = st.session_state.setdefault("vtest_retry_queue", [])
+            if is_correct:
+                while current_w["id"] in q:
+                    q.remove(current_w["id"])
+            else:
+                if current_w["id"] not in q:
+                    q.append(current_w["id"])
+            st.rerun()
+
+        if skip_clicked:
+            st.session_state.vtest_word_id = _select_test_word(current_w["id"])["id"]
+            st.session_state.vtest_answered = False
+            st.session_state.vtest_user_input = ""
+            st.rerun()
+
+        if st.session_state.get("vtest_answered"):
+            if st.session_state.get("vtest_last_correct"):
+                st.success(f"Верно! **{current_w.get('word', '')}** `{current_w.get('ipa', '')}`")
+            else:
+                st.error(
+                    f"Пока неверно. Ваш вариант: *{st.session_state.get('vtest_user_input', '')}* — "
+                    f"правильно: **{current_w.get('word', '')}** `{current_w.get('ipa', '')}`"
+                )
+
+            if current_w.get("example"):
+                st.markdown(f"📝 *Пример:* **{current_w['example']}**")
+            if current_w.get("example_ru"):
+                st.write(f"🇷🇺 *Перевод:* {current_w['example_ru']}")
+
+            _render_audio_controls(current_w.get("word", ""), key_prefix=f"vtest_{current_w['id']}")
+
+            if st.button("➡️ Следующее слово", use_container_width=True):
+                st.session_state.vtest_word_id = _select_test_word(current_w["id"])["id"]
+                st.session_state.vtest_answered = False
+                st.session_state.vtest_user_input = ""
+                st.rerun()
