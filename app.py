@@ -3,6 +3,7 @@ from services.storage import load_progress
 from services.progress_tracker import record_activity
 from modules.dashboard import render_dashboard
 from modules.diagnostic import render_diagnostic
+from modules.vocabulary import render_vocabulary_study, render_flashcards
 
 st.set_page_config(
     page_title="MY ENGLISH — Метод Холмата",
@@ -29,8 +30,8 @@ with st.sidebar:
     menu_items = [
         "Главная панель",
         "Диагностика",
-        "Словарь (Этап 2)",
-        "Карточки (Этап 2)",
+        "Словарь",
+        "Карточки",
         "Грамматика (Этап 3)",
         "Глаголы (Этап 4)",
         "Жизнь и работа (Этап 5)",
@@ -65,6 +66,12 @@ if page == "Главная панель":
 elif page == "Диагностика":
     render_diagnostic(progress)
 
+elif page == "Словарь":
+    render_vocabulary_study(progress)
+
+elif page == "Карточки":
+    render_flashcards(progress)
+
 elif page == "Журнал ошибок":
     st.header("📓 Журнал ошибок")
     mistakes = progress.get("mistakes_log", [])
@@ -82,5 +89,5 @@ else:
     st.header(f"🚧 Раздел «{page}»")
     st.info(
         "Этот модуль запланирован на следующий этап разработки. "
-        "Сначала убедитесь, что Главная панель, Диагностика и Журнал ошибок работают стабильно."
+        "Сначала убедитесь, что уже готовые разделы работают стабильно."
     )
