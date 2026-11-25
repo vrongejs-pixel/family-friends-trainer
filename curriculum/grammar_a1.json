@@ -1,0 +1,453 @@
+{
+  "level": "A1",
+  "title": "Грамматика английского языка — уровень A1 (Базовый)",
+  "lessons": [
+    {
+      "id": "a1_to_be",
+      "level": "A1",
+      "order": 1,
+      "title": "Глагол to be (am / is / are) — кто я, где я, какое состояние",
+      "explanation_ru": "В русском языке в настоящем времени мы часто пропускаем глагол «быть» («Я водитель», «Он на складе», «Она устала»). В английском предложении почти всегда нужен глагол-связка to be, который меняется по лицам: I -> am, he/she/it -> is, we/you/they -> are.",
+      "when_to_use": "Используется для представления себя, профессии, национальности, возраста, местоположения и состояния (не для регулярных действий вроде «работать» или «ходить»).",
+      "formula": "Подлежащее + (am / is / are) + характеристика / место / состояние",
+      "affirmative": "I am a worker. / He is at the warehouse. / They are ready.",
+      "negative": "I am not (I'm not) tired. / She is not (isn't) here. / We are not (aren't) late.",
+      "question": "Am I right? / Is he your manager? / Are you at home?",
+      "examples": [
+        {
+          "en": "I am a warehouse worker.",
+          "ru": "Я работник склада."
+        },
+        {
+          "en": "He is not at work today.",
+          "ru": "Его сегодня нет на работе."
+        },
+        {
+          "en": "Are you ready for the shift?",
+          "ru": "Ты готов к смене?"
+        }
+      ],
+      "common_mistakes": [
+        "Ошибка: «I work a driver» или «I driver». Правильно: «I am a driver» — перед профессией нужен am/is/are и артикль a/an.",
+        "Ошибка: «She is has a car». Правильно: «She has a car» — не смешиваем to be и have."
+      ],
+      "comparisons": [
+        {
+          "form": "I am tired.",
+          "meaning": "Состояние сейчас («Я уставший»)."
+        },
+        {
+          "form": "I work every day.",
+          "meaning": "Регулярное действие («Я работаю каждый день»)."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "a1_to_be_q1",
+          "type": "choice",
+          "prompt": "Выберите правильную форму: «She ___ at the office now.» (Она сейчас в офисе)",
+          "options": ["am", "is", "are", "be"],
+          "answer": "is",
+          "explanation": "С местоимением she (она) используется форма is."
+        },
+        {
+          "id": "a1_to_be_q2",
+          "type": "choice",
+          "prompt": "Как сказать отрицание: «Мы не опаздываем»?",
+          "options": ["We aren't late.", "We don't late.", "We isn't late.", "We not are late."],
+          "answer": "We aren't late.",
+          "explanation": "Для we используется форма are, а отрицание образуется добавлением not: aren't."
+        },
+        {
+          "id": "a1_to_be_q3",
+          "type": "input",
+          "prompt": "Впишите пропущенную форму to be: «They ___ very friendly.»",
+          "accepted": ["are", "'re"],
+          "explanation": "Для множественного числа they выбираем форму are."
+        }
+      ],
+      "sentence_practice": {
+        "prompt_ru": "Составьте простое предложение по-английски: «Я готов к работе.»",
+        "hint_words": ["I", "am", "ready", "for", "work"],
+        "accepted": ["i am ready for work", "i'm ready for work"],
+        "model_answer": "I am ready for work.",
+        "explanation": "Порядок слов: подлежащее (I) + форма to be (am) + состояние/дополнение (ready for work)."
+      }
+    },
+    {
+      "id": "a1_present_simple",
+      "level": "A1",
+      "order": 2,
+      "title": "Present Simple — привычки, расписание и постоянные факты",
+      "explanation_ru": "Present Simple описывает то, что происходит регулярно, по расписанию или является общим фактом. Важное правило: с he, she, it в утверждении к глаголу добавляется окончание -s / -es.",
+      "when_to_use": "Когда говоришь о рабочем графике, привычках, повседневных делах и постоянных фактах (often, usually, every day, always).",
+      "formula_aff": "I / you / we / they + V1 | he / she / it + V1 + (-s/-es)",
+      "formula_neg": "I / you / we / they + do not (don't) + V1 | he / she / it + does not (doesn't) + V1",
+      "formula_q": "Do + I / you / we / they + V1? | Does + he / she / it + V1?",
+      "affirmative": "I start work at 8 AM. / She speaks German.",
+      "negative": "I don't work on Sundays. / He doesn't drive at night.",
+      "question": "Do you live near here? / Does the bus stop here?",
+      "examples": [
+        {
+          "en": "I start my shift at 7 AM.",
+          "ru": "Я начинаю смену в 7 утра."
+        },
+        {
+          "en": "He doesn't eat meat.",
+          "ru": "Он не ест мясо."
+        },
+        {
+          "en": "Do you understand me?",
+          "ru": "Ты меня понимаешь?"
+        }
+      ],
+      "common_mistakes": [
+        "Ошибка: «He work on Monday». Правильно: «He works on Monday» — с he/she/it в утверждении нужно окончание -s.",
+        "Ошибка: «Does he works here?». Правильно: «Does he work here?» — вспомогательный does уже забрал -s, основной глагол остаётся без -s."
+      ],
+      "comparisons": [
+        {
+          "form": "I live in Berlin.",
+          "meaning": "Постоянное место жительства / факт."
+        },
+        {
+          "form": "I am living in a hotel this week.",
+          "meaning": "Временная ситуация только на эту неделю."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "a1_ps_q1",
+          "type": "choice",
+          "prompt": "Выберите правильный вариант: «My shift ___ at 6 PM.» (Моя смена заканчивается в 18:00)",
+          "options": ["finish", "finishes", "is finish", "finishing"],
+          "answer": "finishes",
+          "explanation": "My shift можно заменить на it, поэтому в Present Simple добавляем -es: finishes."
+        },
+        {
+          "id": "a1_ps_q2",
+          "type": "choice",
+          "prompt": "Выберите правильный вопрос: «___ you speak English?»",
+          "options": ["Do", "Does", "Are", "Is"],
+          "answer": "Do",
+          "explanation": "С местоимением you и смысловым глаголом speak используется вспомогательный Do."
+        },
+        {
+          "id": "a1_ps_q3",
+          "type": "input",
+          "prompt": "Напишите отрицательную форму для he/she/it в Present Simple (сокращённую или полную):",
+          "accepted": ["doesn't", "does not"],
+          "explanation": "Для he, she, it в отрицании Present Simple используется doesn't (does not)."
+        }
+      ],
+      "sentence_practice": {
+        "prompt_ru": "Переведите на английский: «Я не работаю по выходным.»",
+        "hint_words": ["I", "don't", "work", "on", "weekends"],
+        "accepted": ["i don't work on weekends", "i do not work on weekends"],
+        "model_answer": "I don't work on weekends.",
+        "explanation": "Для I в отрицании Present Simple ставим don't + начальную форму глагола work."
+      }
+    },
+    {
+      "id": "a1_present_continuous",
+      "level": "A1",
+      "order": 3,
+      "title": "Present Continuous — действие прямо сейчас или временный процесс",
+      "explanation_ru": "Present Continuous строится из двух частей: нужной формы глагола to be (am / is / are) и основного глагола с окончанием -ing. Показывает, что действие идёт в момент речи или вокруг настоящего момента.",
+      "when_to_use": "Когда действие происходит прямо сейчас (now, right now, look!) или является временным процессом в текущий период.",
+      "formula_aff": "Подлежащее + (am / is / are) + V-ing",
+      "formula_neg": "Подлежащее + (am / is / are) + not + V-ing",
+      "formula_q": "(Am / Is / Are) + подлежащее + V-ing?",
+      "affirmative": "I am checking the list right now. / She is calling the doctor.",
+      "negative": "I am not sleeping. / They aren't working today.",
+      "question": "Are you listening to me? / What is he doing?",
+      "examples": [
+        {
+          "en": "I am packing the boxes right now.",
+          "ru": "Я прямо сейчас упаковываю коробки."
+        },
+        {
+          "en": "She is waiting for the bus.",
+          "ru": "Она ждёт автобус."
+        },
+        {
+          "en": "Are they coming to the meeting?",
+          "ru": "Они идут на встречу?"
+        }
+      ],
+      "common_mistakes": [
+        "Ошибка: «I working now». Правильно: «I am working now» — нельзя забывать am/is/are перед формой с -ing.",
+        "Ошибка: «She is work now». Правильно: «She is working now» — к глаголу нужно добавить -ing."
+      ],
+      "comparisons": [
+        {
+          "form": "I read every evening.",
+          "meaning": "Привычка («Я читаю каждый вечер» — Present Simple)."
+        },
+        {
+          "form": "I am reading a contract now.",
+          "meaning": "Действие прямо сейчас («Я читаю договор сейчас» — Present Continuous)."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "a1_pc_q1",
+          "type": "choice",
+          "prompt": "Выберите правильную форму: «Look! The train ___ .» (Смотри! Поезд подъезжает)",
+          "options": ["comes", "is coming", "come", "are coming"],
+          "answer": "is coming",
+          "explanation": "Слово Look! указывает на действие прямо сейчас, а train (it) требует is coming."
+        },
+        {
+          "id": "a1_pc_q2",
+          "type": "choice",
+          "prompt": "Как сказать: «Я сейчас не работаю»?",
+          "options": ["I'm not working now.", "I not working now.", "I don't working now.", "I amn't working now."],
+          "answer": "I'm not working now.",
+          "explanation": "Отрицание в Present Continuous: I'm not + глагол с -ing."
+        },
+        {
+          "id": "a1_pc_q3",
+          "type": "input",
+          "prompt": "Напишите форму глагола make с окончанием -ing (без немой конечной -e):",
+          "accepted": ["making"],
+          "explanation": "У глаголов на немую -e (make -> making) перед -ing буква e убирается."
+        }
+      ],
+      "sentence_practice": {
+        "prompt_ru": "Переведите на английский: «Она сейчас разговаривает с менеджером.»",
+        "hint_words": ["She", "is", "talking", "to", "the", "manager", "now"],
+        "accepted": [
+          "she is talking to the manager now",
+          "she's talking to the manager now",
+          "she is talking to manager now",
+          "she's talking to manager now"
+        ],
+        "model_answer": "She is talking to the manager now.",
+        "explanation": "Для she используем is + talking (глагол talk + -ing)."
+      }
+    },
+    {
+      "id": "a1_past_simple",
+      "level": "A1",
+      "order": 4,
+      "title": "Past Simple — завершённое действие в прошлом",
+      "explanation_ru": "Past Simple нужен для событий, которые начались и закончились в прошлом (yesterday, last week, two days ago, in 2024). Правильные глаголы получают окончание -ed, а неправильные меняют форму (go -> went, see -> saw, have -> had).",
+      "when_to_use": "Когда важно указать или подразумевается факт в прошлом и связь с настоящим не подчёркивается.",
+      "formula_aff": "Подлежащее + V2 / V-ed",
+      "formula_neg": "Подлежащее + did not (didn't) + V1 (начальная форма)",
+      "formula_q": "Did + подлежащее + V1 (начальная форма)?",
+      "affirmative": "I arrived yesterday. / We went to the bank on Monday.",
+      "negative": "I didn't see him. / They didn't work last Saturday.",
+      "question": "Did you get the message? / Where did you stay?",
+      "examples": [
+        {
+          "en": "I signed the contract yesterday.",
+          "ru": "Я подписал договор вчера."
+        },
+        {
+          "en": "We didn't have time for lunch.",
+          "ru": "У нас не было времени на обед."
+        },
+        {
+          "en": "Did you find the address?",
+          "ru": "Ты нашёл адрес?"
+        }
+      ],
+      "common_mistakes": [
+        "Ошибка: «I didn't went there». Правильно: «I didn't go there» — после didn't глагол всегда в начальной форме (V1), прошедшее время уже показал did.",
+        "Ошибка: «Did you worked yesterday?». Правильно: «Did you work yesterday?» — в вопросе с did окончание -ed не ставится."
+      ],
+      "comparisons": [
+        {
+          "form": "I work on Monday.",
+          "meaning": "Обычно / по плану в настоящем или расписании."
+        },
+        {
+          "form": "I worked on Monday.",
+          "meaning": "Уже произошло в прошлый понедельник (Past Simple)."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "a1_past_q1",
+          "type": "choice",
+          "prompt": "Выберите правильное отрицание: «Я не получил зарплату вчера».",
+          "options": ["I didn't get the salary yesterday.", "I didn't got the salary yesterday.", "I not got the salary yesterday.", "I don't got the salary yesterday."],
+          "answer": "I didn't get the salary yesterday.",
+          "explanation": "После didn't используется начальная форма глагола — get."
+        },
+        {
+          "id": "a1_past_q2",
+          "type": "input",
+          "prompt": "Напишите вторую форму (Past Simple) неправильного глагола go:",
+          "accepted": ["went"],
+          "explanation": "Форма Past Simple для глагола go — went."
+        },
+        {
+          "id": "a1_past_q3",
+          "type": "choice",
+          "prompt": "Выберите правильный вопрос: «___ you call the landlord?»",
+          "options": ["Did", "Do", "Were", "Was"],
+          "answer": "Did",
+          "explanation": "Вопрос о прошлом действии со смысловым глаголом call начинается с Did."
+        }
+      ],
+      "sentence_practice": {
+        "prompt_ru": "Переведите на английский: «Вчера я пошёл на работу рано.»",
+        "hint_words": ["Yesterday", "I", "went", "to", "work", "early"],
+        "accepted": ["yesterday i went to work early", "i went to work early yesterday"],
+        "model_answer": "Yesterday I went to work early.",
+        "explanation": "Глагол go в прошедшем времени имеет форму went."
+      }
+    },
+    {
+      "id": "a1_future_simple",
+      "level": "A1",
+      "order": 5,
+      "title": "Future Simple — решения на ходу, обещания и прогнозы",
+      "explanation_ru": "Future Simple строится с помощью вспомогательного глагола will и начальной формы глагола (без частицы to). Часто используется для быстрых решений, обещаний, предложений помочь и прогнозов.",
+      "when_to_use": "Когда принимаешь решение прямо сейчас, обещаешь что-то сделать, предлагаешь помощь или говоришь о будущем (tomorrow, next week, soon).",
+      "formula_aff": "Подлежащее + will ('ll) + V1",
+      "formula_neg": "Подлежащее + will not (won't) + V1",
+      "formula_q": "Will + подлежащее + V1?",
+      "affirmative": "I will help you. / We'll call you tomorrow.",
+      "negative": "I won't be late. / He won't miss the train.",
+      "question": "Will you be at home tonight? / Will they agree?",
+      "examples": [
+        {
+          "en": "I will send the documents today.",
+          "ru": "Я отправлю документы сегодня."
+        },
+        {
+          "en": "Don't worry, I won't forget.",
+          "ru": "Не переживай, я не забуду."
+        },
+        {
+          "en": "Will you help me carry this box?",
+          "ru": "Поможешь мне донести эту коробку?"
+        }
+      ],
+      "common_mistakes": [
+        "Ошибка: «I will to go». Правильно: «I will go» — после will частица to не ставится.",
+        "Ошибка: «Will you goes?». Правильно: «Will you go?» — после will глагол всегда в начальной форме."
+      ],
+      "comparisons": [
+        {
+          "form": "I will call him now.",
+          "meaning": "Решение принято прямо сейчас в момент речи."
+        },
+        {
+          "form": "I called him yesterday.",
+          "meaning": "Действие уже произошло в прошлом."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "a1_fut_q1",
+          "type": "choice",
+          "prompt": "Выберите правильную сокращённую форму отрицания от will not:",
+          "options": ["won't", "willn't", "don't will", "didn't will"],
+          "answer": "won't",
+          "explanation": "Сокращённая форма от will not — won't."
+        },
+        {
+          "id": "a1_fut_q2",
+          "type": "choice",
+          "prompt": "Выберите правильное предложение: «Я перезвоню тебе завтра».",
+          "options": ["I will call you tomorrow.", "I call you tomorrow.", "I am call you tomorrow.", "I will to call you tomorrow."],
+          "answer": "I will call you tomorrow.",
+          "explanation": "Используется will + начальная форма глагола call."
+        },
+        {
+          "id": "a1_fut_q3",
+          "type": "input",
+          "prompt": "Впишите вспомогательный глагол будущего времени: «___ you help me tomorrow?»",
+          "accepted": ["will"],
+          "explanation": "Вопросы в Future Simple начинаются с Will."
+        }
+      ],
+      "sentence_practice": {
+        "prompt_ru": "Переведите на английский: «Я помогу тебе завтра.»",
+        "hint_words": ["I", "will", "help", "you", "tomorrow"],
+        "accepted": ["i will help you tomorrow", "i'll help you tomorrow"],
+        "model_answer": "I will help you tomorrow.",
+        "explanation": "Строим по схеме: подлежащее (I) + will + глагол (help) + дополнение и время."
+      }
+    },
+    {
+      "id": "a1_can_cant",
+      "level": "A1",
+      "order": 6,
+      "title": "Модальный глагол can / can't — умение, возможность и просьба",
+      "explanation_ru": "Глагол can показывает физическую или практическую способность («умею / могу»), возможность в текущей ситуации или вежливую просьбу. Он не меняется по лицам (не нужно добавлять -s с he/she/it) и не требует вспомогательного do/does.",
+      "when_to_use": "Когда говоришь об умениях («умею водить / говорить по-английски»), возможностях («могу прийти сегодня») или просишь о чём-то.",
+      "formula_aff": "Подлежащее + can + V1",
+      "formula_neg": "Подлежащее + cannot (can't) + V1",
+      "formula_q": "Can + подлежащее + V1?",
+      "affirmative": "I can drive a car. / She can speak English.",
+      "negative": "I can't lift this alone. / He can't come today.",
+      "question": "Can you help me, please? / Can we start now?",
+      "examples": [
+        {
+          "en": "I can work on night shifts.",
+          "ru": "Я могу работать в ночные смены."
+        },
+        {
+          "en": "I can't open this file.",
+          "ru": "Я не могу открыть этот файл."
+        },
+        {
+          "en": "Can you repeat that slowly?",
+          "ru": "Можете повторить это медленно?"
+        }
+      ],
+      "common_mistakes": [
+        "Ошибка: «He cans drive». Правильно: «He can drive» — к can никогда не добавляется окончание -s.",
+        "Ошибка: «Do you can swim?». Правильно: «Can you swim?» — с can вопросы и отрицания строятся без do/does/don't."
+      ],
+      "comparisons": [
+        {
+          "form": "I can speak English.",
+          "meaning": "Умение / способность («Я умею говорить по-английски»)."
+        },
+        {
+          "form": "I am speaking English now.",
+          "meaning": "Процесс прямо сейчас («Я сейчас говорю по-английски»)."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "a1_can_q1",
+          "type": "choice",
+          "prompt": "Выберите правильный вариант: «Она умеет водить грузовик».",
+          "options": ["She can drive a truck.", "She cans drive a truck.", "She does can drive a truck.", "She can to drive a truck."],
+          "answer": "She can drive a truck.",
+          "explanation": "После can не ставится to, а с she форма глагола can не меняется."
+        },
+        {
+          "id": "a1_can_q2",
+          "type": "choice",
+          "prompt": "Как вежливо попросить: «Можете помочь мне?»",
+          "options": ["Can you help me?", "Do you can help me?", "Are you can help me?", "Can you to help me?"],
+          "answer": "Can you help me?",
+          "explanation": "Просьба с can начинается с Can + подлежащее + глагол без to."
+        },
+        {
+          "id": "a1_can_q3",
+          "type": "input",
+          "prompt": "Напишите отрицательную форму от can (одно слово с апострофом или слитно):",
+          "accepted": ["can't", "cannot"],
+          "explanation": "Отрицательные формы глагола can — can't или cannot."
+        }
+      ],
+      "sentence_practice": {
+        "prompt_ru": "Переведите на английский: «Я не могу прийти сегодня.»",
+        "hint_words": ["I", "can't", "come", "today"],
+        "accepted": ["i can't come today", "i cannot come today"],
+        "model_answer": "I can't come today.",
+        "explanation": "Используем I + can't + начальную форму глагола come + today."
+      }
+    }
+  ]
+}
