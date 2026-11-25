@@ -8,6 +8,7 @@ from modules.vocabulary import (
     render_flashcards,
     render_vocabulary_test,
 )
+from modules.grammar import render_grammar
 
 st.set_page_config(
     page_title="MY ENGLISH — Метод Холмата",
@@ -64,19 +65,16 @@ page = st.session_state.current_page
 
 if page == "Главная панель":
     render_dashboard(progress)
-
+elif page in ("Грамматика", "Грамматика (Этап 3)"):
+    render_grammar(progress)
 elif page == "Диагностика":
     render_diagnostic(progress)
-
 elif page == "Словарь":
     render_vocabulary_study(progress)
-
 elif page == "Карточки":
     render_flashcards(progress)
-
 elif page == "Тест по словарю":
     render_vocabulary_test(progress)
-
 elif page == "Журнал ошибок":
     st.header("📓 Журнал ошибок")
     mistakes = progress.get("mistakes_log", [])
@@ -89,7 +87,6 @@ elif page == "Журнал ошибок":
                 st.write(f"Задание: {m['task']}")
                 st.write(f"❌ Ваш ответ: `{m['user_answer']}` → ✅ Правильно: **`{m['correct_answer']}`**")
                 st.caption(f"💡 Объяснение: {m['explanation']}")
-
 else:
     st.header(f"🚧 Раздел «{page}»")
     st.info(
