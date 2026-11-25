@@ -9,22 +9,22 @@ from services.storage import save_progress
 from services.progress_tracker import record_activity
 
 
-DEFAULT_MODEL = "gemini-2.5-flash"
+DEFAULT_MODEL = "gemini-3.8-flash"
 
 
 def _get_api_key() -> str:
     try:
         if "GEMINI_API_KEY" in st.secrets and st.secrets["GEMINI_API_KEY"]:
-            return str(st.secrets["GEMINI_API_KEY"]).strip()
+            return str(st.secrets["GEMINI_API_KEY"]).strip().strip('"').strip("'")
     except Exception:
         pass
-    return os.environ.get("GEMINI_API_KEY", "").strip()
+    return os.environ.get("GEMINI_API_KEY", "").strip().strip('"').strip("'")
 
 
 def _get_model_name() -> str:
     try:
         if "GEMINI_MODEL" in st.secrets and st.secrets["GEMINI_MODEL"]:
-            return str(st.secrets["GEMINI_MODEL"]).strip()
+            return str(st.secrets["GEMINI_MODEL"]).strip().strip('"').strip("'")
     except Exception:
         pass
     return os.environ.get("GEMINI_MODEL", DEFAULT_MODEL).strip() or DEFAULT_MODEL
@@ -58,13 +58,38 @@ def _extract_json(raw_text: str) -> dict | list | None:
     return None
 
 
+def _send_gemini_request(url: str, headers: dict, payload: dict) -> tuple[bool, str]:
+    req = urllib.request.Request(
+        url=url,
+        data=json.dumps(payload).encode("utf-8"),
+        headers=headers,
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=35) as resp:
+            body = json.loads(resp.read().decode("utf-8"))
+        candidates = body.get("candidates") or []
+        if not candidates:
+            return False, "Модель вернула пустой ответ. Попробуйте ещё раз."
+        parts = ((candidates[0].get("content") or {}).get("parts")) or []
+        text_out = "".join(p.get("text", "") for p in parts if isinstance(p, dict)).strip()
+        if not text_out:
+            return False, "Не удалось прочитать текст ответа от Gemini."
+        return True, text_out
+    except urllib.error.HTTPError as e:
+        err_detail = e.read().decode("utf-8", errors="ignore")
+        return False, f"Ошибка Gemini API ({e.code}): {err_detail[:250]}"
+    except Exception as e:
+        return False, f"Ошибка подключения к Gemini API: {e}"
+
+
 def ask_gemini(prompt: str, system_instruction: str = "", expect_json: bool = False) -> tuple[bool, str]:
     api_key = _get_api_key()
     if not api_key:
         return False, "Не найден GEMINI_API_KEY. Добавьте его в Secrets приложения на Streamlit Cloud."
 
     model = _get_model_name()
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
+    base_url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 
     payload: dict = {
         "contents": [
@@ -84,29 +109,28 @@ def ask_gemini(prompt: str, system_instruction: str = "", expect_json: bool = Fa
     if expect_json:
         payload["generationConfig"]["responseMimeType"] = "application/json"
 
-    req = urllib.request.Request(
-        url=url,
-        data=json.dumps(payload).encode("utf-8"),
-        headers={"Content-Type": "application/json"},
-        method="POST",
-    )
+    if api_key.startswith("AQ."):
+        ok, res = _send_gemini_request(
+            url=base_url,
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {api_key}",
+            },
+            payload=payload,
+        )
+        if ok:
+            return True, res
+        return _send_gemini_request(
+            url=f"{base_url}?key={api_key}",
+            headers={"Content-Type": "application/json"},
+            payload=payload,
+        )
 
-    try:
-        with urllib.request.urlopen(req, timeout=35) as resp:
-            body = json.loads(resp.read().decode("utf-8"))
-        candidates = body.get("candidates") or []
-        if not candidates:
-            return False, "Модель вернула пустой ответ. Попробуйте ещё раз."
-        parts = ((candidates[0].get("content") or {}).get("parts")) or []
-        text_out = "".join(p.get("text", "") for p in parts if isinstance(p, dict)).strip()
-        if not text_out:
-            return False, "Не удалось прочитать текст ответа от Gemini."
-        return True, text_out
-    except urllib.error.HTTPError as e:
-        err_detail = e.read().decode("utf-8", errors="ignore")
-        return False, f"Ошибка Gemini API ({e.code}): {err_detail[:250]}"
-    except Exception as e:
-        return False, f"Ошибка подключения к Gemini API: {e}"
+    return _send_gemini_request(
+        url=f"{base_url}?key={api_key}",
+        headers={"Content-Type": "application/json"},
+        payload=payload,
+    )
 
 
 def _log_mistake(progress: dict, topic: str, task: str, user_ans: str, correct_ans: str, explanation: str):
@@ -124,7 +148,6 @@ def _log_mistake(progress: dict, topic: str, task: str, user_ans: str, correct_a
 
 
 def render_gemini_practice_lab(progress: dict, scope_key: str = "main", default_topic: str = "Present Simple & Past Simple"):
-    """Единый блок бесконечной практики ('ферма / склад') через Gemini API."""
     st.subheader("♾️ Бесконечная практика и жизненные ситуации (Gemini)")
     st.caption("Генерируй свежие задания, жизненные диалоги и слова под нужный момент без ограничения по числу попыток.")
 
