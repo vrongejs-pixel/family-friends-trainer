@@ -83,7 +83,7 @@ def _load_grammar_lessons() -> list[dict]:
     return lessons
 
 
-def _render_lesson_theory(lesson: dict, accent: str):
+def _render_lesson_theory(lesson: dict, accent: str, key_prefix: str = "th"):
     st.markdown(f"### 📖 {lesson['title']}")
     st.caption(f"Уровень: **{lesson['level']}**")
 
@@ -130,7 +130,11 @@ def _render_lesson_theory(lesson: dict, accent: str):
                     st.markdown(f"**{en_txt}**")
                     st.write(f"🇷🇺 {ru_txt}")
                 with c_right:
-                    if en_txt and st.button("🔊 Озвучить", key=f"g_ex_{lesson['id']}_{idx}", use_container_width=True):
+                    if en_txt and st.button(
+                        "🔊 Озвучить",
+                        key=f"g_ex_{key_prefix}_{lesson['id']}_{idx}",
+                        use_container_width=True,
+                    ):
                         audio = get_audio_bytes(en_txt, accent=accent, slow=False)
                         if audio:
                             st.audio(audio, format="audio/mp3", autoplay=True)
@@ -148,7 +152,7 @@ def _render_lesson_theory(lesson: dict, accent: str):
             st.markdown(f"- **{cmp_item.get('form', '')}** — {cmp_item.get('meaning', '')}")
 
 
-def _render_lesson_practice(lesson: dict, progress: dict):
+def _render_lesson_practice(lesson: dict, progress: dict, key_prefix: str = "pr"):
     st.markdown("#### 6. Практические упражнения")
     exercises = lesson.get("exercises") or []
     if not exercises:
@@ -170,10 +174,10 @@ def _render_lesson_practice(lesson: dict, progress: dict):
                 choice_val = st.radio(
                     "Выберите вариант:",
                     options=options,
-                    key=f"g_opt_{qid}",
+                    key=f"g_opt_{key_prefix}_{qid}",
                     index=None,
                 )
-                if st.button("Проверить ответ", key=f"g_chk_{qid}", type="primary"):
+                if st.button("Проверить ответ", key=f"g_chk_{key_prefix}_{qid}", type="primary"):
                     if choice_val is None:
                         st.info("Сначала выберите один из вариантов.")
                     else:
@@ -193,8 +197,8 @@ def _render_lesson_practice(lesson: dict, progress: dict):
                         record_activity(progress, st.session_state, actions=1)
 
             else:
-                user_inp = st.text_input("Введите ответ:", key=f"g_inp_{qid}")
-                if st.button("Проверить ответ", key=f"g_chk_inp_{qid}", type="primary"):
+                user_inp = st.text_input("Введите ответ:", key=f"g_inp_{key_prefix}_{qid}")
+                if st.button("Проверить ответ", key=f"g_chk_inp_{key_prefix}_{qid}", type="primary"):
                     accepted = q.get("accepted") or []
                     norm_user = _normalize_text(user_inp)
                     norm_acc = [_normalize_text(a) for a in accepted]
@@ -231,8 +235,8 @@ def _render_lesson_practice(lesson: dict, progress: dict):
             if hints:
                 st.caption("Опорные слова: " + " · ".join(hints))
 
-            sp_inp = st.text_input("Напишите предложение целиком:", key=f"g_sp_inp_{lesson['id']}")
-            if st.button("Проверить предложение", key=f"g_sp_btn_{lesson['id']}"):
+            sp_inp = st.text_input("Напишите предложение целиком:", key=f"g_sp_inp_{key_prefix}_{lesson['id']}")
+            if st.button("Проверить предложение", key=f"g_sp_btn_{key_prefix}_{lesson['id']}"):
                 accepted = sp.get("accepted") or []
                 norm_u = _normalize_text(sp_inp)
                 norm_a = [_normalize_text(a) for a in accepted]
@@ -305,10 +309,10 @@ def render_grammar(progress: dict):
 
     tab_theory, tab_practice, tab_both = st.tabs(["📚 Теория и примеры", "✍️ Тренажёр", "🔄 Теория + Практика"])
     with tab_theory:
-        _render_lesson_theory(current_lesson, accent=accent)
+        _render_lesson_theory(current_lesson, accent=accent, key_prefix="tab1")
     with tab_practice:
-        _render_lesson_practice(current_lesson, progress=progress)
+        _render_lesson_practice(current_lesson, progress=progress, key_prefix="tab2")
     with tab_both:
-        _render_lesson_theory(current_lesson, accent=accent)
+        _render_lesson_theory(current_lesson, accent=accent, key_prefix="tab3")
         st.divider()
-        _render_lesson_practice(current_lesson, progress=progress)
+        _render_lesson_practice(current_lesson, progress=progress, key_prefix="tab3")
