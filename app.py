@@ -1,6 +1,7 @@
 import streamlit as st
 from services.storage import load_progress
 from services.progress_tracker import record_activity
+from services.gemini_coach import render_gemini_practice_lab
 from modules.dashboard import render_dashboard
 from modules.diagnostic import render_diagnostic
 from modules.vocabulary import (
@@ -37,6 +38,7 @@ with st.sidebar:
         "Карточки",
         "Тест по словарю",
         "Грамматика (Этап 3)",
+        "AI-практика (Gemini)",
         "Глаголы (Этап 4)",
         "Жизнь и работа (Этап 5)",
         "Чтение (Этап 6)",
@@ -67,6 +69,8 @@ if page == "Главная панель":
     render_dashboard(progress)
 elif page in ("Грамматика", "Грамматика (Этап 3)"):
     render_grammar(progress)
+elif page == "AI-практика (Gemini)":
+    render_gemini_practice_lab(progress, scope_key="main_ai_lab", default_topic="Работа, повседневная речь и грамматика")
 elif page == "Диагностика":
     render_diagnostic(progress)
 elif page == "Словарь":
